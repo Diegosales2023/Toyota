@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import HomeTab from './components/HomeTab';
 import BoletoTab from './components/BoletoTab';
@@ -8,8 +8,47 @@ import PrivacidadeTab from './components/PrivacidadeTab';
 import WhatsAppButton from './components/WhatsAppButton';
 import { ShieldCheck, HelpCircle, PhoneCall, Landmark, AlertCircle } from 'lucide-react';
 
+const pathToTab = (path: string): string => {
+  const cleanPath = path.toLowerCase().replace(/\/$/, '');
+  if (cleanPath === '/2viadeboleto') return 'boleto';
+  if (cleanPath === '/quitacao') return 'quitacao';
+  if (cleanPath === '/negociacao') return 'negociacao';
+  if (cleanPath === '/privacidade') return 'privacidade';
+  return 'home';
+};
+
+const tabToPath = (tab: string): string => {
+  if (tab === 'boleto') return '/2viadeboleto';
+  if (tab === 'quitacao') return '/quitacao';
+  if (tab === 'negociacao') return '/negociacao';
+  if (tab === 'privacidade') return '/privacidade';
+  return '/';
+};
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState<string>('home');
+  const [activeTab, setActiveTabState] = useState<string>(() => {
+    return pathToTab(window.location.pathname);
+  });
+
+  const setActiveTab = (tab: string) => {
+    setActiveTabState(tab);
+    const newPath = tabToPath(tab);
+    if (window.location.pathname !== newPath) {
+      window.history.pushState({ tab }, '', newPath);
+    }
+  };
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      const tab = event.state?.tab || pathToTab(window.location.pathname);
+      setActiveTabState(tab);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
 
   // Render the appropriate tab content based on active state
   const renderTabContent = () => {
