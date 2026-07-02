@@ -9,7 +9,7 @@ export default function NegociacaoTab() {
 
   const handleWhatsAppRedirect = (e: React.FormEvent) => {
     e.preventDefault();
-    const url = 'https://api.whatsapp.com/send?phone=5511977655148&text=Suporte%20Online';
+    const url = 'https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento';
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 

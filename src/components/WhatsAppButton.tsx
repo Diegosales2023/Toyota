@@ -12,7 +12,7 @@ export default function WhatsAppButton() {
   }, []);
 
   const handleClick = () => {
-    window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Suporte%20Online', '_blank', 'noopener,noreferrer');
+    window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer');
   };
 
   return (

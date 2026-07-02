@@ -328,7 +328,7 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
               </div>
 
               <button 
-                onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Suporte%20Online', '_blank', 'noopener,noreferrer')}
+                onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer')}
                 className="w-full rounded-xl bg-red-600 py-3.5 text-sm font-bold text-white shadow hover:bg-red-700 transition-all cursor-pointer flex items-center justify-center space-x-2"
               >
                 <span>Solicitar Crédito Toyota</span>
