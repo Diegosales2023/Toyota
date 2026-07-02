@@ -1,0 +1,134 @@
+import React, { useState } from 'react';
+import Navbar from './components/Navbar';
+import HomeTab from './components/HomeTab';
+import BoletoTab from './components/BoletoTab';
+import QuitacaoTab from './components/QuitacaoTab';
+import NegociacaoTab from './components/NegociacaoTab';
+import PrivacidadeTab from './components/PrivacidadeTab';
+import WhatsAppButton from './components/WhatsAppButton';
+import { ShieldCheck, HelpCircle, PhoneCall, Landmark, AlertCircle } from 'lucide-react';
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState<string>('home');
+
+  // Render the appropriate tab content based on active state
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'home':
+        return <HomeTab setActiveTab={setActiveTab} />;
+      case 'boleto':
+        return <BoletoTab />;
+      case 'quitacao':
+        return <QuitacaoTab />;
+      case 'negociacao':
+        return <NegociacaoTab />;
+      case 'privacidade':
+        return <PrivacidadeTab />;
+      default:
+        return <HomeTab setActiveTab={setActiveTab} />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-between" id="app-root-container">
+      <div>
+        {/* Navigation Header */}
+        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+
+        {/* Global Security Disclaimer strip */}
+        <div className="bg-red-600 text-white py-2 px-4 text-xs font-semibold">
+          <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <span className="flex items-center gap-1.5 justify-center sm:justify-start">
+              <AlertCircle className="h-4 w-4 shrink-0 text-white" />
+              <span>Aviso: O Banco Toyota não solicita transferências imediatas para PIX pessoais.</span>
+            </span>
+            <span className="text-[10px] opacity-90 text-center sm:text-right">
+              Confira sempre o CNPJ oficial: 02.115.111/0001-22
+            </span>
+          </div>
+        </div>
+
+        {/* Main Content Stage */}
+        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex-grow">
+          {renderTabContent()}
+        </main>
+      </div>
+
+      {/* Corporate Bank Footer */}
+      <footer className="bg-slate-900 text-slate-400 text-xs mt-16 border-t border-slate-800" id="banco-toyota-footer">
+        
+        {/* Upper footer help contacts */}
+        <div className="border-b border-slate-800 py-10 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-600 text-white">
+                  <span className="font-display text-sm font-bold">T</span>
+                </div>
+                <span className="font-display font-bold text-sm tracking-tight text-white uppercase">Banco Toyota</span>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-normal">
+                Comprometidos com a excelência, transparência e segurança jurídica de todos os serviços de financiamento de automóveis no Brasil.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="font-bold text-xs uppercase tracking-wider text-slate-300">Central de Atendimento</h4>
+              <ul className="space-y-1.5 text-slate-400 text-[11px]">
+                <li className="flex items-center gap-1.5">
+                  <PhoneCall className="h-3 w-3 text-red-500" />
+                  <span>SAC: 0800 016 4155</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <PhoneCall className="h-3 w-3 text-red-500" />
+                  <span>Deficientes Auditivos: 0800 771 2340</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="font-bold text-xs uppercase tracking-wider text-slate-300">Ouvidoria Geral</h4>
+              <ul className="space-y-1.5 text-slate-400 text-[11px]">
+                <li className="flex items-center gap-1.5">
+                  <HelpCircle className="h-3 w-3 text-red-500" />
+                  <span>Telefone: 0800 772 5855</span>
+                </li>
+                <li>
+                  <span className="text-[10px] text-slate-500 block">Atendimento de Seg. a Sex. das 9h às 17h</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="font-bold text-xs uppercase tracking-wider text-slate-300">Segurança Bancária</h4>
+              <div className="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/60 flex items-start space-x-2.5">
+                <ShieldCheck className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
+                <p className="text-[10px] text-slate-300 leading-normal">
+                  Sempre confira os dados do destinatário ao efetuar pagamentos. O beneficiário final legítimo é o <strong>Banco Toyota do Brasil S.A.</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Lower footer copyright & legally required central bank disclaimers */}
+        <div className="py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl space-y-4">
+          <p className="text-[10px] text-slate-500 leading-relaxed">
+            Banco Toyota do Brasil S.A. - Av. Paulista, 1274 - 14º andar - CEP 01310-925 - Bela Vista, São Paulo/SP. CNPJ: 02.115.111/0001-22. Instituição autorizada a funcionar pelo Banco Central do Brasil. O crédito está sujeito a análise cadastral e aprovação. Consulte as taxas, tarifas, CET (Custo Efetivo Total) e demais condições do financiamento no momento da contratação.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-between items-center pt-4 border-t border-slate-800 text-[10px] text-slate-500">
+            <span>© {new Date().getFullYear()} Banco Toyota do Brasil S.A. Todos os direitos reservados.</span>
+            <div className="flex space-x-4 mt-2 sm:mt-0 font-medium text-slate-400">
+              <button onClick={() => { setActiveTab('privacidade'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-red-500 transition-colors cursor-pointer text-[10px]">Políticas de Privacidade</button>
+              <a href="#sac" className="hover:text-red-500 transition-colors">Segurança</a>
+              <a href="#central" className="hover:text-red-500 transition-colors">Banco Central</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      {/* Floating Animated WhatsApp Integration */}
+      <WhatsAppButton />
+    </div>
+  );
+}

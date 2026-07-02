@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+    <script>
+      (function() {
+        try {
+          var currentFetch = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return currentFetch;
+            },
+            set: function(val) {
+              currentFetch = val;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {
+          console.warn('Fetch override protection failed:', e);
+        }
+
+        // Mock WebSocket to prevent development-only socket connection failures and error overlays
+        try {
+          if (window.WebSocket) {
+            var FakeWebSocket = function(url, protocols) {
+              var self = this;
+              this.url = url;
+              this.readyState = 0; // CONNECTING
+              this.bufferedAmount = 0;
+              this.extensions = "";
+              this.protocol = "";
+              this.binaryType = "blob";
+              
+              this.onopen = null;
+              this.onmessage = null;
+              this.onerror = null;
+              this.onclose = null;
+              
+              this.send = function() {};
+              this.close = function() {
+                self.readyState = 3; // CLOSED
+              };
+              
+              this.addEventListener = function(type, listener) {
+                // Safely keep event listeners
+              };
+              this.removeEventListener = function(type, listener) {};
+              this.dispatchEvent = function() { return true; };
+            };
+            
+            FakeWebSocket.CONNECTING = 0;
+            FakeWebSocket.OPEN = 1;
+            FakeWebSocket.CLOSING = 2;
+            FakeWebSocket.CLOSED = 3;
+            
+            window.WebSocket = FakeWebSocket;
+          }
+        } catch (e) {
+          console.warn('WebSocket mock failed:', e);
+        }
+
+        // Suppress annoying development-only WebSocket / HMR connection errors and unhandled rejections
+        window.addEventListener('unhandledrejection', function(event) {
+          if (event.reason) {
+            var msg = event.reason.message || String(event.reason);
+            if (msg.indexOf('WebSocket') !== -1 || msg.indexOf('websocket') !== -1 || msg.indexOf('WebSocket closed') !== -1) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }
+        }, true);
+
+        window.addEventListener('error', function(event) {
+          if (event.message) {
+            var msg = event.message;
+            if (msg.indexOf('WebSocket') !== -1 || msg.indexOf('websocket') !== -1 || msg.indexOf('WebSocket closed') !== -1) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }
+        }, true);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

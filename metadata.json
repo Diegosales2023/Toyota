@@ -1,0 +1,6 @@
+{
+  "name": "Portal de Financiamento - Banco Toyota",
+  "description": "Portal oficial para emissão de 2ª via de boleto, quitação antecipada com descontos proporcionais e renegociação de parcelas em atraso.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
