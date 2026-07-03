@@ -1,0 +1,112 @@
+import React from 'react';
+import { ShieldCheck, Car, Key, FileSpreadsheet, Percent, HeartHandshake, HelpCircle, PhoneCall, ArrowRight } from 'lucide-react';
+
+export default function ServicosTab() {
+  const services = [
+    {
+      icon: <Car className="h-6 w-6 text-red-600" />,
+      title: 'CDC - Crédito Direto ao Consumidor',
+      description: 'A forma tradicional e segura de financiar seu veículo com parcelas mensais fixas e taxas de juros competitivas, do início ao fim do contrato.',
+    },
+    {
+      icon: <Key className="h-6 w-6 text-emerald-600" />,
+      title: 'Ciclo Toyota',
+      description: 'A maneira mais fácil de estar sempre de Toyota novo. Entrada facilitada, parcelas mensais reduzidas e garantia de recompra do seu seminovo pela concessionária ao final.',
+    },
+    {
+      icon: <FileSpreadsheet className="h-6 w-6 text-blue-600" />,
+      title: 'Leasing Financeiro',
+      description: 'Indicado para empresas e pessoas físicas que buscam benefícios tributários e operacionais ao alugar o veículo com opção de compra ao término do prazo.',
+    },
+    {
+      icon: <ShieldCheck className="h-6 w-6 text-indigo-600" />,
+      title: 'Seguros Toyota',
+      description: 'Proteção completa e sob medida para seu veículo, com franquia reduzida, uso de peças originais nas concessionárias e atendimento ágil em caso de sinistros.',
+    },
+  ];
+
+  return (
+    <div className="py-8 space-y-12 max-w-7xl mx-auto animate-fade-in" id="servicos-tab-container">
+      {/* Page Header */}
+      <div className="text-center space-y-2">
+        <h2 className="font-display text-3xl font-extrabold text-gray-900 tracking-tight">
+          Nossos Serviços Prestados
+        </h2>
+        <p className="text-sm text-slate-500 max-w-lg mx-auto">
+          Oferecemos produtos financeiros sob medida para que você conquiste seu veículo Toyota com total tranquilidade, planejamento e segurança.
+        </p>
+      </div>
+
+      {/* Grid of Main Services */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {services.map((service, idx) => (
+          <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 sm:p-8 space-y-4 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="p-3 rounded-xl bg-slate-50 inline-block">
+                {service.icon}
+              </div>
+              <h3 className="text-base font-bold text-gray-950">{service.title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">{service.description}</p>
+            </div>
+            
+            <div className="pt-4 border-t border-slate-50 mt-4 flex items-center justify-between">
+              <button 
+                onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer')}
+                className="text-xs font-bold text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer"
+              >
+                <span>Solicitar simulação</span>
+                <ArrowRight className="h-3 w-3" />
+              </button>
+              <span className="text-[10px] text-slate-400 font-semibold uppercase">Banco Toyota</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Corporate Fleet Services Info Card */}
+      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-slate-800 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(239,68,68,0.1),transparent_40%)]" />
+        
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div className="lg:col-span-8 space-y-3">
+            <span className="inline-flex items-center rounded-md bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-400 ring-1 ring-inset ring-red-500/20">
+              Soluções Corporativas
+            </span>
+            <h3 className="font-display text-xl font-bold">Financiamento de Frotas e Grandes Empresas</h3>
+            <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
+              Desenvolvemos estruturas de financiamento e leasing operacional customizadas para frotistas, locadoras de veículos, órgãos públicos e empresas de todos os portes. Otimize o fluxo de caixa corporativo da sua empresa com as melhores condições e taxas especiais de montadora.
+            </p>
+          </div>
+          
+          <div className="lg:col-span-4 lg:text-right">
+            <button 
+              onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer')}
+              className="w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-6 py-3.5 transition-all cursor-pointer shadow-lg shadow-red-900/30"
+            >
+              <PhoneCall className="h-4 w-4" />
+              <span>Atendimento Pessoa Jurídica</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Safety & Compliance Disclaimer card */}
+      <div className="bg-white border border-gray-100 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-full bg-slate-50 text-slate-400">
+            <HelpCircle className="h-5 w-5" />
+          </div>
+          <p className="text-xs text-slate-600 leading-normal">
+            Todos os produtos financeiros ofertados pelo Banco Toyota do Brasil S.A. estão sujeitos à aprovação cadastral e conformidade com as taxas vigentes.
+          </p>
+        </div>
+        <button 
+          onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer')}
+          className="rounded-xl border border-gray-200 hover:border-gray-300 text-gray-700 text-xs font-bold px-5 py-2.5 transition-all cursor-pointer whitespace-nowrap shrink-0"
+        >
+          Central de Dúvidas
+        </button>
+      </div>
+    </div>
+  );
+}

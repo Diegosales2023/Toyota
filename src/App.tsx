@@ -4,7 +4,12 @@ import HomeTab from './components/HomeTab';
 import BoletoTab from './components/BoletoTab';
 import QuitacaoTab from './components/QuitacaoTab';
 import NegociacaoTab from './components/NegociacaoTab';
+import AntecipacaoTab from './components/AntecipacaoTab';
+import SobreNosTab from './components/SobreNosTab';
+import ServicosTab from './components/ServicosTab';
 import PrivacidadeTab from './components/PrivacidadeTab';
+import NegociarDividaTab from './components/NegociarDividaTab';
+import FaleConoscoTab from './components/FaleConoscoTab';
 import WhatsAppButton from './components/WhatsAppButton';
 import { ShieldCheck, HelpCircle, PhoneCall, Landmark, AlertCircle } from 'lucide-react';
 
@@ -13,6 +18,11 @@ const pathToTab = (path: string): string => {
   if (cleanPath === '/2viadeboleto') return 'boleto';
   if (cleanPath === '/quitacao') return 'quitacao';
   if (cleanPath === '/negociacao') return 'negociacao';
+  if (cleanPath === '/antecipacao') return 'antecipacao';
+  if (cleanPath === '/sobrenos') return 'sobrenos';
+  if (cleanPath === '/servicos') return 'servicos';
+  if (cleanPath === '/negociardivida') return 'negociardivida';
+  if (cleanPath === '/faleconosco') return 'faleconosco';
   if (cleanPath === '/privacidade') return 'privacidade';
   return 'home';
 };
@@ -21,6 +31,11 @@ const tabToPath = (tab: string): string => {
   if (tab === 'boleto') return '/2viadeboleto';
   if (tab === 'quitacao') return '/quitacao';
   if (tab === 'negociacao') return '/negociacao';
+  if (tab === 'antecipacao') return '/antecipacao';
+  if (tab === 'sobrenos') return '/sobrenos';
+  if (tab === 'servicos') return '/servicos';
+  if (tab === 'negociardivida') return '/negociardivida';
+  if (tab === 'faleconosco') return '/faleconosco';
   if (tab === 'privacidade') return '/privacidade';
   return '/';
 };
@@ -61,6 +76,16 @@ export default function App() {
         return <QuitacaoTab />;
       case 'negociacao':
         return <NegociacaoTab />;
+      case 'antecipacao':
+        return <AntecipacaoTab />;
+      case 'sobrenos':
+        return <SobreNosTab />;
+      case 'servicos':
+        return <ServicosTab />;
+      case 'negociardivida':
+        return <NegociarDividaTab />;
+      case 'faleconosco':
+        return <FaleConoscoTab />;
       case 'privacidade':
         return <PrivacidadeTab />;
       default:
