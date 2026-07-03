@@ -1,37 +1,11 @@
-import React, { useState } from 'react';
-import { VEHICLE_DATABASE } from '../mocks';
-import { FileText, Coins, Percent, ArrowRight, ShieldAlert, CheckCircle, Smartphone } from 'lucide-react';
+import React from 'react';
+import { FileText, Coins, Percent, ArrowRight, ShieldAlert, CheckCircle, Smartphone, MessageSquare } from 'lucide-react';
 
 interface HomeTabProps {
   setActiveTab: (tab: string) => void;
 }
 
 export default function HomeTab({ setActiveTab }: HomeTabProps) {
-  // Simulator States
-  const [selectedVehicleIdx, setSelectedVehicleIdx] = useState(0);
-  const [downPayment, setDownPayment] = useState(40000);
-  const [installments, setInstallments] = useState(36);
-
-  const vehicle = VEHICLE_DATABASE[selectedVehicleIdx];
-  const maxDownPayment = Math.floor(vehicle.price * 0.8);
-  const minDownPayment = Math.floor(vehicle.price * 0.1);
-
-  // Interest rate calculation (simulating standard vehicle financing rates around 1.35% - 1.55%)
-  const monthlyRate = 0.0142; // 1.42% am
-  const principal = vehicle.price - downPayment;
-  
-  // PMT formula: PMT = r * PV / (1 - (1 + r)^-n)
-  const monthlyPayment = principal > 0 
-    ? (monthlyRate * principal) / (1 - Math.pow(1 + monthlyRate, -installments))
-    : 0;
-
-  const totalFinanced = monthlyPayment * installments + downPayment;
-  const totalInterest = totalFinanced - vehicle.price;
-
-  // Format currency helpers
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
-  };
 
   return (
     <div className="space-y-16 py-8" id="home-tab-container">
@@ -184,159 +158,98 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
         </div>
       </section>
 
-      {/* Simulator Section */}
-      <section className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-10 shadow-sm space-y-10">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-gray-100 pb-6">
+      {/* WhatsApp Support Information Section */}
+      <section className="bg-white border border-slate-150 rounded-3xl p-6 sm:p-10 shadow-sm space-y-8" id="whatsapp-info-section">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
           <div className="space-y-1">
-            <h2 className="font-display text-2xl font-extrabold text-gray-900">
-              Simulador de Financiamento Toyota
+            <h2 className="font-display text-2xl font-extrabold text-gray-900 flex items-center gap-2">
+              <MessageSquare className="h-6 w-6 text-emerald-600 shrink-0" />
+              Atendimento Digital Banco Toyota via WhatsApp
             </h2>
             <p className="text-sm text-slate-500">
-              Quer adquirir um novo veículo? Simule prazos e valores de parcelas de acordo com a taxa vigente.
+              Inicie um atendimento automatizado e seguro diretamente em nosso WhatsApp para resolver pendências do seu contrato.
             </p>
           </div>
-          <div className="flex items-center space-x-2 bg-emerald-50 px-3.5 py-1.5 rounded-full text-xs font-semibold text-emerald-700 border border-emerald-100">
-            <CheckCircle className="h-4 w-4 shrink-0" />
-            <span>Taxa Promocional do Mês</span>
+          <div className="flex items-center space-x-2 bg-emerald-50 px-3.5 py-1.5 rounded-full text-xs font-semibold text-emerald-700 border border-emerald-100 shrink-0">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Kira (Assistente Virtual) Ativa</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          
-          {/* Simulator Inputs */}
-          <div className="lg:col-span-7 space-y-8">
-            
-            {/* Vehicle Selection */}
-            <div className="space-y-3">
-              <label className="text-sm font-semibold text-gray-800 block">
-                1. Escolha o Modelo Toyota
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {VEHICLE_DATABASE.map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setSelectedVehicleIdx(index);
-                      // Adjust downpayment bounds if currently exceeding maximum of newly selected car
-                      const maxDP = Math.floor(item.price * 0.8);
-                      if (downPayment > maxDP) {
-                        setDownPayment(Math.floor(item.price * 0.4));
-                      }
-                    }}
-                    className={`p-3 rounded-xl border text-left transition-all ${
-                      selectedVehicleIdx === index
-                        ? 'border-red-600 bg-red-50/50 text-red-700 ring-1 ring-red-600'
-                        : 'border-gray-200 hover:border-gray-300 text-gray-700 bg-white'
-                    }`}
-                  >
-                    <span className="block text-xs font-bold leading-tight">{item.model}</span>
-                    <span className="block text-[10px] text-gray-400 mt-1">Ref: {formatCurrency(item.price)}</span>
-                  </button>
-                ))}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          {/* Informative text */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-slate-850">Como funciona o nosso canal de suporte?</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Nossa assistente inteligente, <strong>Kira</strong>, foi projetada para tornar a sua experiência o mais rápida e prática possível. Sem filas de espera no telefone e sem burocracia, você pode solicitar os seguintes serviços em segundos:
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-1.5">
+                <span className="font-bold text-xs text-red-600 uppercase tracking-wider block">Boleto e Parcelas</span>
+                <p className="text-xs text-slate-500">Emissão de 2ª via de boleto de parcela mensal ou atrasada com atualização de juros.</p>
+              </div>
+              <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-1.5">
+                <span className="font-bold text-xs text-emerald-600 uppercase tracking-wider block">Desconto de Quitação</span>
+                <p className="text-xs text-slate-500">Amortização de parcelas ou quitação total com desconto proporcional de juros garantido por lei.</p>
+              </div>
+              <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-1.5">
+                <span className="font-bold text-xs text-blue-600 uppercase tracking-wider block">Acordo de Dívida</span>
+                <p className="text-xs text-slate-500">Planos flexíveis de renegociação para regularização imediata de restrições de crédito.</p>
+              </div>
+              <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-1.5">
+                <span className="font-bold text-xs text-purple-600 uppercase tracking-wider block">Segurança Integrada</span>
+                <p className="text-xs text-slate-500">Documentos oficiais em PDF protegidos com criptografia e registro oficial Febraban.</p>
               </div>
             </div>
 
-            {/* Down Payment Slider */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="font-semibold text-gray-800">2. Valor da Entrada (Apoio)</span>
-                <span className="font-mono font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">
-                  {formatCurrency(downPayment)}
-                </span>
-              </div>
-              <input
-                type="range"
-                min={minDownPayment}
-                max={maxDownPayment}
-                step={1000}
-                value={downPayment}
-                onChange={(e) => setDownPayment(parseInt(e.target.value))}
-                className="w-full accent-red-600"
-              />
-              <div className="flex justify-between text-xs text-slate-400">
-                <span>Min: {formatCurrency(minDownPayment)} (10%)</span>
-                <span>Max: {formatCurrency(maxDownPayment)} (80%)</span>
-              </div>
+            <div className="flex items-start gap-2.5 text-xs text-amber-800 bg-amber-50/50 border border-amber-100/60 p-3.5 rounded-xl">
+              <ShieldAlert className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
+              <p>
+                <strong>Dica de segurança:</strong> Nós nunca solicitamos senhas de acesso, códigos SMS ou dados de cartão de crédito. Todo o processo é validado unicamente através do seu CPF/CNPJ do titular do financiamento.
+              </p>
             </div>
-
-            {/* Installments Selection */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="font-semibold text-gray-800">3. Número de Parcelas</span>
-                <span className="font-mono font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">
-                  {installments} Meses
-                </span>
-              </div>
-              <div className="grid grid-cols-4 gap-3">
-                {[12, 24, 36, 48, 60].map((inst) => (
-                  <button
-                    key={inst}
-                    onClick={() => setInstallments(inst)}
-                    className={`py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                      installments === inst
-                        ? 'bg-gray-900 text-white shadow'
-                        : 'bg-gray-50 text-gray-600 border border-gray-100 hover:bg-gray-100'
-                    }`}
-                  >
-                    {inst}x
-                  </button>
-                ))}
-              </div>
-            </div>
-
           </div>
 
-          {/* Simulator Outcomes */}
-          <div className="lg:col-span-5 bg-slate-50 border border-slate-100 p-6 rounded-2xl flex flex-col justify-between space-y-6">
+          {/* Call-to-action box */}
+          <div className="lg:col-span-5 bg-emerald-50/40 border border-emerald-100/60 p-6 sm:p-8 rounded-2xl space-y-6 flex flex-col justify-between">
             <div className="space-y-4">
-              <div className="relative overflow-hidden rounded-xl h-44 bg-slate-200">
-                <img 
-                  src={vehicle.image} 
-                  alt={vehicle.model}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-4 text-white">
-                  <span className="text-[10px] font-bold text-red-500 uppercase tracking-widest">Modelo selecionado</span>
-                  <h4 className="text-sm font-extrabold leading-tight">{vehicle.model}</h4>
-                </div>
+              <div className="space-y-1">
+                <span className="text-[10px] font-bold text-emerald-750 uppercase tracking-widest block">Canal Oficial Autorizado</span>
+                <h4 className="text-lg font-extrabold text-slate-900 leading-tight">Atendimento Instantâneo</h4>
               </div>
+              
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Clique no botão abaixo para ser redirecionado de forma segura ao nosso canal oficial do WhatsApp. Envie uma mensagem com a sua solicitação e receba suporte imediato.
+              </p>
 
-              <div className="space-y-3 text-sm pt-2">
-                <div className="flex justify-between text-slate-600">
-                  <span>Valor do Veículo:</span>
-                  <span className="font-semibold text-gray-900">{formatCurrency(vehicle.price)}</span>
+              <div className="space-y-2 pt-2">
+                <div className="flex items-center gap-2 text-xs text-slate-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  <span>Média de resposta: <strong>menos de 1 min</strong></span>
                 </div>
-                <div className="flex justify-between text-slate-600">
-                  <span>Valor Financiado:</span>
-                  <span className="font-semibold text-gray-900">{formatCurrency(principal)}</span>
-                </div>
-                <div className="flex justify-between text-slate-600">
-                  <span>Taxa de Juros Especial:</span>
-                  <span className="font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded text-xs">1,42% a.m.</span>
+                <div className="flex items-center gap-2 text-xs text-slate-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  <span>Disponível: <strong>24h por dia, 7 dias por semana</strong></span>
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-slate-200 pt-4 space-y-4">
-              <div className="text-center bg-white border border-slate-150 p-4 rounded-xl shadow-sm">
-                <span className="text-xs text-slate-500 block font-medium">Parcela Estimada (CDC)</span>
-                <span className="text-3xl font-extrabold text-red-600 block my-1">
-                  {formatCurrency(monthlyPayment)}
-                </span>
-                <span className="text-[10px] text-slate-400 block">Simulação sujeita a análise de crédito</span>
-              </div>
-
+            <div className="pt-4 border-t border-emerald-100/60">
               <button 
                 onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer')}
-                className="w-full rounded-xl bg-red-600 py-3.5 text-sm font-bold text-white shadow hover:bg-red-700 transition-all cursor-pointer flex items-center justify-center space-x-2"
+                className="w-full rounded-xl bg-emerald-600 py-4 text-xs font-bold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center space-x-2"
+                id="btn-whatsapp-home-info"
               >
-                <span>Solicitar Crédito Toyota</span>
-                <ArrowRight className="h-4 w-4" />
+                <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.588 2.01 14.12 1.01 11.5 1.01c-5.436 0-9.86 4.37-9.864 9.8 0 1.637.452 3.23 1.309 4.633L1.925 21.8l6.452-1.68c.31.08.31.08-.01.08zM17.51 14.39c-.3-.149-1.762-.87-2.034-.97-.27-.1-.47-.149-.669.149-.2.3-.764.96-.938 1.16-.17.2-.34.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.785-1.48-1.76-1.65-2.059-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.38-.02-.53-.07-.15-.67-1.62-.92-2.22-.24-.59-.49-.51-.67-.52-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.03 1.01-1.03 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.09 3.2 5.07 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.11.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.08-.12-.29-.2-.59-.35z"/>
+                </svg>
+                <span>Falar com Atendimento no WhatsApp</span>
               </button>
             </div>
           </div>
-
         </div>
       </section>
 

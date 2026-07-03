@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
-import { Handshake, Scale, CheckCircle2, FileText, Send, ShieldAlert, Percent, HelpCircle, Lock } from 'lucide-react';
+import React from 'react';
+import { Handshake, Scale, CheckCircle2, FileText, ShieldAlert, Percent, HelpCircle, Lock } from 'lucide-react';
 
 export default function NegociarDividaTab() {
-  const [waName, setWaName] = useState('');
-  const [waCpf, setWaCpf] = useState('');
-  const [waContract, setWaContract] = useState('');
-  const [waOfferType, setWaOfferType] = useState('VISTA_DESCONTO');
-
-  const handleWhatsAppRedirect = (e: React.FormEvent) => {
-    e.preventDefault();
-    const formattedText = `Nome: ${waName}%0ACPF: ${waCpf}%0AContrato: ${waContract}%0AOpcão%20Escolha: ${waOfferType}`;
-    const url = `https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento%20-%20Negociar%20Divida%0A%0A${formattedText}`;
+  const handleWhatsAppRedirect = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const url = 'https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento%20-%20Negociar%20Divida';
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
@@ -86,77 +80,52 @@ export default function NegociarDividaTab() {
           </div>
         </div>
 
-        {/* Right column: Interactive form */}
+        {/* Right column: WhatsApp Direct Information Panel */}
         <div className="lg:col-span-5">
           <div className="bg-white border border-gray-100 shadow-md shadow-gray-100/50 rounded-2xl p-6 sm:p-8 space-y-6">
             <div className="space-y-1">
-              <span className="inline-flex items-center rounded-md bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                Canal de Acordo
+              <span className="inline-flex items-center rounded-md bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/10">
+                Canal de Acordo Ativo
               </span>
-              <h3 className="text-lg font-bold text-gray-950">Simular Negociação</h3>
+              <h3 className="text-lg font-bold text-gray-950">Acordo via WhatsApp</h3>
               <p className="text-xs text-slate-400">
-                Preencha os dados abaixo de forma segura para iniciar a consulta das parcelas vencidas.
+                Consulte as opções de parcelamento de suas pendências ou quitação com descontos especiais na nossa central.
               </p>
             </div>
 
-            <form onSubmit={handleWhatsAppRedirect} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700">Nome Completo</label>
-                <input
-                  type="text"
-                  value={waName}
-                  onChange={(e) => setWaName(e.target.value)}
-                  placeholder="Nome do titular do financiamento"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
-                  required
-                />
-              </div>
+            <div className="space-y-4 border-t border-slate-100 pt-4">
+              <h4 className="font-bold text-xs text-slate-800">Como funciona o acordo de dívida:</h4>
+              
+              <ul className="space-y-2.5 text-xs text-slate-600">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <span>Atendimento rápido para tirar restrições de crédito</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <span>Emissão de boletos oficiais do Banco Toyota S.A.</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <span>Totalmente seguro sob as regras do CDC e da LGPD</span>
+                </li>
+              </ul>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700">CPF do Titular</label>
-                <input
-                  type="text"
-                  value={waCpf}
-                  onChange={(e) => setWaCpf(e.target.value)}
-                  placeholder="000.000.000-00"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
-                  required
-                />
+              <div className="p-3 bg-emerald-50/50 border border-emerald-100/40 rounded-xl text-[11px] text-emerald-800">
+                <p className="font-bold">Dados protegidos:</p>
+                <p>Nossos analistas financeiros usam criptografia SSL para garantir total segurança.</p>
               </div>
+            </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700">Número do Contrato (Opcional)</label>
-                <input
-                  type="text"
-                  value={waContract}
-                  onChange={(e) => setWaContract(e.target.value)}
-                  placeholder="Ex: 200.543210"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700">Preferência de Acordo</label>
-                <select
-                  value={waOfferType}
-                  onChange={(e) => setWaOfferType(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800 font-semibold"
-                >
-                  <option value="VISTA_DESCONTO">Pagamento à Vista (com maior desconto)</option>
-                  <option value="PARCELADO_ENTRADA">Parcelar Dívida com Entrada Facilitada</option>
-                  <option value="QUITACO_CONTRATO">Quitação Geral do Financiamento</option>
-                  <option value="DILUICAO_SALDO">Diluir as Parcelas no Final do Contrato</option>
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 px-4 text-xs shadow-md shadow-red-200 transition-all flex items-center justify-center space-x-2 cursor-pointer mt-2"
-              >
-                <Send className="h-4 w-4" />
-                <span>Negociar via WhatsApp Oficial</span>
-              </button>
-            </form>
+            <button
+              onClick={() => handleWhatsAppRedirect()}
+              className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-4 text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.588 2.01 14.12 1.01 11.5 1.01c-5.436 0-9.86 4.37-9.864 9.8 0 1.637.452 3.23 1.309 4.633L1.925 21.8l6.452-1.68c.31.08.31.08-.01.08zM17.51 14.39c-.3-.149-1.762-.87-2.034-.97-.27-.1-.47-.149-.669.149-.2.3-.764.96-.938 1.16-.17.2-.34.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.785-1.48-1.76-1.65-2.059-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.38-.02-.53-.07-.15-.67-1.62-.92-2.22-.24-.59-.49-.51-.67-.52-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.03 1.01-1.03 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.09 3.2 5.07 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.11.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.08-.12-.29-.2-.59-.35z"/>
+              </svg>
+              <span>Negociar via WhatsApp Oficial</span>
+            </button>
 
             <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-[10px] text-slate-400">
               <span className="flex items-center gap-1 font-semibold">
