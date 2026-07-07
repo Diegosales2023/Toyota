@@ -151,7 +151,7 @@ export default function AntecipacaoTab() {
 
             <div className="space-y-4">
               <a 
-                href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento%20-%20Antecipacao%20de%20Parcelas"
+                href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-4 text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center"
@@ -165,7 +165,7 @@ export default function AntecipacaoTab() {
               <div className="text-center space-y-1">
                 <span className="text-[10px] text-slate-500 block">Link de redirecionamento direto:</span>
                 <a 
-                  href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento%20-%20Antecipacao%20de%20Parcelas"
+                  href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold underline break-all block"

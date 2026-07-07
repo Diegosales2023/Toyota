@@ -50,13 +50,15 @@ export default function ServicosTab() {
             </div>
             
             <div className="pt-4 border-t border-slate-50 mt-4 flex items-center justify-between">
-              <button 
-                onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer')}
+              <a 
+                href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-xs font-bold text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer"
               >
                 <span>Solicitar simulação</span>
                 <ArrowRight className="h-3 w-3" />
-              </button>
+              </a>
               <span className="text-[10px] text-slate-400 font-semibold uppercase">Banco Toyota</span>
             </div>
           </div>
@@ -79,13 +81,15 @@ export default function ServicosTab() {
           </div>
           
           <div className="lg:col-span-4 lg:text-right">
-            <button 
-              onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer')}
-              className="w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-6 py-3.5 transition-all cursor-pointer shadow-lg shadow-red-900/30"
+            <a 
+              href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-6 py-3.5 transition-all cursor-pointer shadow-lg shadow-red-900/30 text-center"
             >
               <PhoneCall className="h-4 w-4" />
               <span>Atendimento Pessoa Jurídica</span>
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -100,12 +104,14 @@ export default function ServicosTab() {
             Todos os produtos financeiros ofertados pelo Banco Toyota do Brasil S.A. estão sujeitos à aprovação cadastral e conformidade com as taxas vigentes.
           </p>
         </div>
-        <button 
-          onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer')}
-          className="rounded-xl border border-gray-200 hover:border-gray-300 text-gray-700 text-xs font-bold px-5 py-2.5 transition-all cursor-pointer whitespace-nowrap shrink-0"
+        <a 
+          href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-xl border border-gray-200 hover:border-gray-300 text-gray-700 text-xs font-bold px-5 py-2.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-center"
         >
           Central de Dúvidas
-        </button>
+        </a>
       </div>
     </div>
   );

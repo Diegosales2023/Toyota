@@ -155,7 +155,7 @@ export default function QuitacaoTab() {
 
           <div className="space-y-4">
             <a
-              href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento%20-%20Quitacao%20de%20Contrato"
+              href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center"
@@ -170,7 +170,7 @@ export default function QuitacaoTab() {
             <div className="text-center space-y-1">
               <span className="text-[10px] text-slate-500 block">Link de redirecionamento direto:</span>
               <a 
-                href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento%20-%20Quitacao%20de%20Contrato"
+                href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold underline break-all block"

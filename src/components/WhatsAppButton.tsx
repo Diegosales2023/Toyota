@@ -50,8 +50,10 @@ export default function WhatsAppButton() {
       `}</style>
 
       {/* Floating Action Button */}
-      <button
-        onClick={handleClick}
+      <a
+        href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
+        target="_blank"
+        rel="noopener noreferrer"
         className={`relative flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500 text-white shadow-2xl hover:bg-emerald-600 transition-all cursor-pointer ${
           wiggle ? 'animate-custom-wiggle' : 'hover:scale-110 active:scale-95'
         }`}
@@ -75,7 +77,7 @@ export default function WhatsAppButton() {
         <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-red-600 text-[10px] font-bold text-white flex items-center justify-center border border-white animate-bounce">
           1
         </span>
-      </button>
+      </a>
     </div>
   );
 }

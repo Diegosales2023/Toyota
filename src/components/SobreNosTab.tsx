@@ -131,13 +131,15 @@ export default function SobreNosTab() {
           Nosso relacionamento vai além do financiamento do seu carro. Se você precisa de qualquer auxílio corporativo, nossa central de relacionamento está sempre aberta para você.
         </p>
         <div className="pt-2">
-          <button 
-            onClick={() => window.open('https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento', '_blank', 'noopener,noreferrer')}
-            className="inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-6 py-3 shadow-md shadow-red-200 transition-all cursor-pointer"
+          <a 
+            href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-6 py-3 shadow-md shadow-red-200 transition-all cursor-pointer text-center"
           >
             <PhoneCall className="h-4 w-4" />
             <span>Falar com Atendimento Oficial</span>
-          </button>
+          </a>
         </div>
       </div>
     </div>
