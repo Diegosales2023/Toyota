@@ -11,6 +11,22 @@ const PORT = 3000;
 
 app.use(express.json());
 
+// Set Content-Security-Policy headers to allow Google Tag Manager and Google Analytics
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self' * data: blob: 'unsafe-inline' 'unsafe-eval'; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com; " +
+    "script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com; " +
+    "img-src 'self' * data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com; " +
+    "connect-src 'self' * https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net; " +
+    "frame-src 'self' https://www.googletagmanager.com; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "font-src 'self' https://fonts.gstatic.com data:;"
+  );
+  next();
+});
+
 // Lazy-loaded Gemini client
 let aiClient: GoogleGenAI | null = null;
 
