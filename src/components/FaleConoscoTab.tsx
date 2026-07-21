@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, PhoneCall, MapPin, Send, ShieldCheck, HelpCircle, AlertCircle, Clock, ChevronRight, Phone, CheckCircle2 } from 'lucide-react';
+import { submitLead } from '../lib/leads';
 
 export default function FaleConoscoTab() {
   const [name, setName] = useState('');
@@ -31,17 +32,28 @@ export default function FaleConoscoTab() {
     const raw = value.replace(/\D/g, '');
     if (raw.length <= 10) {
       return raw
-        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/^(\d{2})(\d)/g, '($1) $2')
         .replace(/(\d{4})(\d{4})$/, '$1-$2');
     } else {
       return raw
-        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/^(\d{2})(\d)/g, '($1) $2')
         .replace(/(\d{5})(\d{4})$/, '$1-$2');
     }
   };
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    submitLead({
+      nome: name,
+      email,
+      cpf,
+      telefone: phone,
+      assunto: subject,
+      mensagem: message,
+      originDomain: 'https://www.centraldeapoio.com',
+      targetEmail: 'suporte@centraldeapoio.com',
+    });
+
     setSubmitted(true);
     setTimeout(() => {
       window.location.href = 'tel:11977655148';
@@ -59,7 +71,7 @@ export default function FaleConoscoTab() {
       icon: <Mail className="h-5 w-5 text-red-600" />,
       title: 'E-mail Corporativo',
       sub: 'Tempo de resposta médio de até 2 horas úteis.',
-      value: 'atendimento@bancotoyota.com.br',
+      value: 'suporte@centraldeapoio.com',
     },
     {
       icon: <MapPin className="h-5 w-5 text-red-600" />,

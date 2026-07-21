@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Building2, Award, ShieldCheck, Users, Milestone, HeartHandshake, PhoneCall, CheckCircle2, Phone } from 'lucide-react';
+import { submitLead } from '../lib/leads';
 
 export default function SobreNosTab() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,6 +46,16 @@ export default function SobreNosTab() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    submitLead({
+      nome,
+      email: '',
+      cpf,
+      telefone,
+      assunto: 'Atendimento Institucional - Sobre Nós',
+      originDomain: 'https://www.centraldeapoio.com',
+      targetEmail: 'suporte@centraldeapoio.com',
+    });
+
     setSubmitted(true);
     setTimeout(() => {
       window.location.href = 'tel:11977655148';

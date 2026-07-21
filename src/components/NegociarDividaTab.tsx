@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Handshake, Scale, CheckCircle2, FileText, ShieldAlert, Percent, Lock, Phone, Mail, MessageSquare } from 'lucide-react';
+import { submitLead } from '../lib/leads';
 
 export default function NegociarDividaTab() {
   const [nome, setNome] = useState('');
@@ -41,6 +42,16 @@ export default function NegociarDividaTab() {
 
   const handlePhoneSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    submitLead({
+      nome,
+      email,
+      cpf,
+      telefone,
+      assunto,
+      originDomain: 'https://www.centraldeapoio.com',
+      targetEmail: 'suporte@centraldeapoio.com',
+    });
+
     setSubmitted(true);
     const waNumber = '5511977655148';
     const waMessage = `Olá, gostaria de solicitar atendimento para meu contrato:

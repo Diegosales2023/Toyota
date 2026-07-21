@@ -67,7 +67,70 @@ Regras de comportamento:
 - Mantenha respostas concisas, estruturadas com tópicos e fáceis de ler no chat do WhatsApp.
 `;
 
+// In-memory leads store
+interface LeadItem {
+  id: string;
+  nome: string;
+  email: string;
+  cpf?: string;
+  telefone?: string;
+  assunto?: string;
+  mensagem?: string;
+  contrato?: string;
+  originDomain: string;
+  targetEmail: string;
+  createdAt: string;
+}
+
+const leadsDatabase: LeadItem[] = [];
+
 // API Routes
+app.post('/api/leads', (req, res) => {
+  try {
+    const { nome, email, cpf, telefone, assunto, mensagem, contrato, originDomain, targetEmail } = req.body;
+
+    if (!nome || (!email && !telefone)) {
+      return res.status(400).json({ error: 'Nome e pelo menos um meio de contato (e-mail ou telefone) são obrigatórios.' });
+    }
+
+    const newLead: LeadItem = {
+      id: `lead_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      nome,
+      email: email || '',
+      cpf: cpf || '',
+      telefone: telefone || '',
+      assunto: assunto || 'Atendimento Geral',
+      mensagem: mensagem || '',
+      contrato: contrato || '',
+      originDomain: originDomain || 'https://www.centraldeapoio.com',
+      targetEmail: targetEmail || 'suporte@centraldeapoio.com',
+      createdAt: new Date().toISOString(),
+    };
+
+    leadsDatabase.unshift(newLead);
+    console.log(`[LEAD RECEBIDO] [${newLead.originDomain}] ${newLead.nome} | ${newLead.email} | ${newLead.telefone} | Target: ${newLead.targetEmail}`);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Lead recebido e registrado com sucesso para suporte@centraldeapoio.com.',
+      leadId: newLead.id,
+      lead: newLead
+    });
+  } catch (err: any) {
+    console.error('Erro ao processar lead:', err);
+    return res.status(500).json({ error: 'Erro interno ao processar lead.' });
+  }
+});
+
+app.get('/api/leads', (req, res) => {
+  return res.json({
+    total: leadsDatabase.length,
+    domain: 'https://www.centraldeapoio.com',
+    targetEmail: 'suporte@centraldeapoio.com',
+    leads: leadsDatabase
+  });
+});
+
 app.post('/api/chat', async (req, res) => {
   const { messages } = req.body;
 
