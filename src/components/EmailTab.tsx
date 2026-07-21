@@ -199,13 +199,13 @@ ${nome}`;
 
               {/* Redirecionamentos Extras */}
               <div className="pt-4 border-t border-slate-100 space-y-3">
-                <p className="text-[10px] text-slate-400">Quer atendimento imediato por telefone?</p>
+                <p className="text-[10px] text-slate-400">Caso seu programa de e-mail não tenha aberto automaticamente, clique abaixo:</p>
                 <a
-                  href="tel:11977655148"
+                  href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`Solicitação de Atendimento - ${assunto}`)}&body=${encodeURIComponent(`Olá, gostaria de solicitar atendimento para meu contrato:\n- Assunto: ${assunto}\n- Nome: ${nome}\n- CPF/CNPJ: ${cpf}\n- E-mail: ${email}\n- Contrato: ${contrato || 'Não informado'}\n- Telefone: ${telefone}\n\nMensagem: ${mensagem}`)}`}
                   className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
                 >
-                  <Phone className="h-4 w-4" />
-                  <span>Ligar para Central: (11) 97765-5148</span>
+                  <Mail className="h-4 w-4" />
+                  <span>Enviar E-mail para suporte@centraldeapoio.com</span>
                 </a>
                 <button
                   onClick={() => setSubmitted(false)}

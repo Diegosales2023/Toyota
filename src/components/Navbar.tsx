@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, X, Landmark, PhoneCall, ShieldCheck } from 'lucide-react';
+import { Menu, X, Landmark, Mail, ShieldCheck } from 'lucide-react';
 
 interface NavbarProps {
   activeTab: string;
@@ -54,9 +54,9 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             <span className="font-semibold text-slate-600">Ambiente 100% Seguro</span>
           </div>
           <div className="text-right">
-            <p className="text-[9px] uppercase tracking-wider font-semibold text-gray-400">Atendimento SAC</p>
+            <p className="text-[9px] uppercase tracking-wider font-semibold text-gray-400">Atendimento Suporte</p>
             <p className="text-xs font-extrabold text-gray-900 flex items-center justify-end gap-1">
-              <PhoneCall className="h-3 w-3 text-red-600" /> 0800 016 4155
+              <Mail className="h-3 w-3 text-red-600" /> suporte@centraldeapoio.com
             </p>
           </div>
         </div>

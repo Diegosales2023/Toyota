@@ -12,7 +12,7 @@ import NegociarDividaTab from './components/NegociarDividaTab';
 import FaleConoscoTab from './components/FaleConoscoTab';
 import EmailTab from './components/EmailTab';
 import PhoneSupportButton from './components/PhoneSupportButton';
-import { ShieldCheck, HelpCircle, PhoneCall, Landmark, AlertCircle } from 'lucide-react';
+import { ShieldCheck, HelpCircle, Mail, Landmark, AlertCircle } from 'lucide-react';
 
 const pathToTab = (path: string): string => {
   const cleanPath = path.toLowerCase().replace(/\/$/, '');
@@ -145,25 +145,21 @@ export default function App() {
               <h4 className="font-bold text-xs uppercase tracking-wider text-slate-300">Central de Atendimento</h4>
               <ul className="space-y-1.5 text-slate-400 text-[11px]">
                 <li className="flex items-center gap-1.5">
-                  <PhoneCall className="h-3 w-3 text-red-500" />
-                  <span>SAC: 0800 016 4155</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <PhoneCall className="h-3 w-3 text-red-500" />
-                  <span>Deficientes Auditivos: 0800 771 2340</span>
+                  <Mail className="h-3 w-3 text-red-500" />
+                  <span>E-mail: suporte@centraldeapoio.com</span>
                 </li>
               </ul>
             </div>
 
             <div className="space-y-2">
-              <h4 className="font-bold text-xs uppercase tracking-wider text-slate-300">Ouvidoria Geral</h4>
+              <h4 className="font-bold text-xs uppercase tracking-wider text-slate-300">Suporte Oficial</h4>
               <ul className="space-y-1.5 text-slate-400 text-[11px]">
                 <li className="flex items-center gap-1.5">
-                  <HelpCircle className="h-3 w-3 text-red-500" />
-                  <span>Telefone: 0800 772 5855</span>
+                  <ShieldCheck className="h-3 w-3 text-emerald-500" />
+                  <span>Atendimento Ativo 24/7 via E-mail</span>
                 </li>
                 <li>
-                  <span className="text-[10px] text-slate-500 block">Atendimento de Seg. a Sex. das 9h às 17h</span>
+                  <span className="text-[10px] text-slate-500 block">Resposta rápida em horário comercial</span>
                 </li>
               </ul>
             </div>
