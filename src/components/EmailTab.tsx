@@ -155,45 +155,19 @@ export default function EmailTab() {
                 <CheckCircle2 className="h-8 w-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-gray-900">Solicitação Registrada!</h3>
+                <h3 className="text-xl font-bold text-gray-900">Solicitação Enviada com Sucesso!</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Sua solicitação sobre <strong className="text-slate-800">{assunto}</strong> foi gravada com sucesso no banco de dados do sistema (backup disponível em <strong>/api/contacts</strong>).
+                  Recebemos os dados da sua solicitação sobre <strong className="text-slate-800">{assunto}</strong>. Nossa equipe entrará em contato em até 2 horas úteis através do e-mail <strong className="text-slate-800">{email}</strong>.
                 </p>
               </div>
 
-              {emailSentStatus === true ? (
-                <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-left space-y-1 text-xs text-emerald-900">
-                  <p className="font-bold flex items-center gap-1.5 text-emerald-800">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
-                    E-mail despachado por SMTP!
-                  </p>
-                  <p className="text-[11px] leading-relaxed text-emerald-700">
-                    A mensagem foi enviada de forma automatizada pelo servidor para <strong>suporte@centraldeapoio.com</strong>.
-                  </p>
-                </div>
-              ) : (
-                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-left space-y-1.5 text-xs text-amber-900">
-                  <p className="font-bold flex items-center gap-1.5 text-amber-900">
-                    <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
-                    Observação sobre envio automático por E-mail:
-                  </p>
-                  <p className="text-[11px] leading-relaxed text-amber-800">
-                    Seus dados já foram registrados no sistema. Como as variáveis de autenticação SMTP de servidor (como <strong>SMTP_PASS</strong>) não foram configuradas no ambiente, você pode enviar o e-mail via leitor local ou configurar o SMTP na Vercel.
-                  </p>
-                </div>
-              )}
-
               {/* Message Details Preview Card */}
-              <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-5 text-left space-y-3">
-                <div className="flex justify-between border-b border-slate-100 pb-2 text-[11px]">
-                  <span className="text-slate-400 font-bold">Destinatário:</span>
-                  <span className="text-slate-700 font-mono font-bold">suporte@centraldeapoio.com</span>
-                </div>
+              <div className="bg-slate-50 rounded-xl border border-slate-100 p-5 text-left space-y-3">
                 <div className="flex justify-between border-b border-slate-100 pb-2 text-[11px]">
                   <span className="text-slate-400 font-bold">Assunto:</span>
                   <span className="text-slate-700 font-semibold">Atendimento Oficial - {assunto}</span>
                 </div>
-                <div className="space-y-1 text-xs text-slate-600 pt-1 font-mono text-[11px] leading-relaxed">
+                <div className="space-y-1 text-xs text-slate-600 pt-1 leading-relaxed">
                   <p><strong>Nome:</strong> {nome}</p>
                   <p><strong>CPF/CNPJ:</strong> {cpf}</p>
                   <p><strong>E-mail:</strong> {email}</p>
@@ -202,12 +176,12 @@ export default function EmailTab() {
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-100 space-y-3">
+              <div className="pt-4 border-t border-slate-100">
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="text-xs text-slate-500 hover:text-slate-700 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-1"
+                  className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all cursor-pointer border-none outline-none"
                 >
-                  Voltar e enviar nova solicitação
+                  Enviar Nova Solicitação
                 </button>
               </div>
             </div>

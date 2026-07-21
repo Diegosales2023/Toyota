@@ -231,33 +231,11 @@ export default function SobreNosTab() {
                   <CheckCircle2 className="h-8 w-8" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg font-bold text-gray-900">Mensagem Registrada!</h3>
+                  <h3 className="text-lg font-bold text-gray-900">Solicitação Enviada com Sucesso!</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Agradecemos o seu contato, <strong className="text-slate-800">{nome}</strong>. Sua solicitação foi salva no sistema com sucesso.
+                    Agradecemos o seu contato, <strong className="text-slate-800">{nome}</strong>. Sua solicitação foi recebida por nossa equipe de atendimento.
                   </p>
                 </div>
-
-                {emailSentStatus === true ? (
-                  <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-left space-y-1 text-xs text-emerald-900">
-                    <p className="font-bold flex items-center gap-1.5 text-emerald-800">
-                      <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
-                      E-mail despachado por SMTP!
-                    </p>
-                    <p className="text-[11px] leading-relaxed text-emerald-700">
-                      A mensagem foi enviada de forma automatizada pelo servidor para <strong>suporte@centraldeapoio.com</strong>.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-left space-y-1.5 text-xs text-amber-900">
-                    <p className="font-bold flex items-center gap-1.5 text-amber-900">
-                      <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
-                      Observação sobre envio de E-mail:
-                    </p>
-                    <p className="text-[11px] leading-relaxed text-amber-800">
-                      Seus dados foram salvos no sistema. O envio de e-mail automatizado utiliza as configurações SMTP de produção.
-                    </p>
-                  </div>
-                )}
 
                 <div className="pt-2 border-t border-slate-100">
                   <button

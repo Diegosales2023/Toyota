@@ -187,25 +187,17 @@ Enviado via www.centraldeapoio.com`;
               <CheckCircle2 className="h-8 w-8" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-xl font-bold text-gray-900">Solicitação Enviada!</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Sua solicitação de atendimento sobre <strong className="text-slate-800">{assunto}</strong> foi registrada e enviada para <strong className="text-slate-800">suporte@centraldeapoio.com</strong>.
+              <h3 className="text-xl font-bold text-gray-900">Solicitação Enviada com Sucesso!</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Recebemos suas informações com sucesso. Nossa equipe analisará sua solicitação de renegociação sobre <strong className="text-slate-800">{assunto}</strong> e retornará em breve.
               </p>
             </div>
-            <div className="pt-4 border-t border-slate-100 space-y-3">
-              <p className="text-[10px] text-slate-400">Caso seu programa de e-mail não tenha aberto automaticamente, clique no botão abaixo:</p>
-              <a
-                href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`Solicitação de Atendimento - ${assunto}`)}&body=${encodeURIComponent(`Olá, gostaria de solicitar atendimento para meu contrato:\n- Assunto: ${assunto}\n- Nome: ${nome}\n- CPF/CNPJ: ${cpf}\n- E-mail: ${email}\n- Telefone: ${telefone}`)}`}
-                className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
-              >
-                <Mail className="h-4 w-4" />
-                <span>Enviar E-mail para suporte@centraldeapoio.com</span>
-              </a>
+            <div className="pt-4 border-t border-slate-100">
               <button
                 onClick={() => setSubmitted(false)}
-                className="text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-2"
+                className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all cursor-pointer border-none outline-none"
               >
-                Voltar para o formulário
+                Enviar Nova Solicitação
               </button>
             </div>
           </div>

@@ -50,9 +50,9 @@ export default function PhoneSupportButton() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    submitLead({
+    await submitLead({
       nome,
       email,
       cpf,
@@ -62,16 +62,6 @@ export default function PhoneSupportButton() {
       targetEmail: 'suporte@centraldeapoio.com',
     });
 
-    const emailSubject = `Solicitação de Suporte Direto`;
-    const emailBody = `Olá, solicito atendimento do suporte:
-- Nome: ${nome}
-- CPF/CNPJ: ${cpf}
-- E-mail: ${email}
-- Telefone: ${telefone}
-
-Enviado via www.centraldeapoio.com`;
-
-    window.location.href = `mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
     setSubmitted(true);
   };
 

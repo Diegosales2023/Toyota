@@ -71,30 +71,46 @@ export async function sendLeadEmail(lead: ContactLead): Promise<{ sent: boolean;
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM } = process.env;
 
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
-    console.warn('[SMTP AVISO] Variáveis de ambiente SMTP não configuradas (SMTP_HOST/SMTP_USER/SMTP_PASS). Simulando envio de e-mail para o lead:', lead.id);
+    console.warn('[SMTP AVISO] Variáveis de ambiente SMTP não configuradas no servidor Vercel.');
     return {
       sent: false,
-      message: 'SMTP não configurado no servidor. Envio simulado com sucesso e lead armazenado no backup local.',
+      message: 'SMTP não configurado no painel da Vercel (SMTP_HOST / SMTP_USER / SMTP_PASS ausentes).',
     };
   }
 
   try {
     const port = Number(SMTP_PORT) || 587;
-    const transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
+    const isSecure = port === 465;
+
+    // Direct CJS/ESM safe import check
+    const nm = nodemailer as any;
+    const createTransport = nm.createTransport || nm.default?.createTransport || nm;
+
+    if (typeof createTransport !== 'function') {
+      return {
+        sent: false,
+        message: 'Falha interna ao inicializar o módulo Nodemailer.',
+      };
+    }
+
+    const transporter = createTransport({
+      host: SMTP_HOST.trim(),
       port: port,
-      secure: port === 465,
+      secure: isSecure,
       auth: {
-        user: SMTP_USER,
-        pass: SMTP_PASS,
+        user: SMTP_USER.trim(),
+        pass: SMTP_PASS.trim(),
       },
+      connectionTimeout: 4000,
+      greetingTimeout: 4000,
+      socketTimeout: 4000,
       tls: {
         rejectUnauthorized: false,
       },
     });
 
-    const fromEmail = SMTP_FROM || SMTP_USER;
-    const recipientEmail = lead.targetEmail || 'suporte@centraldeapoio.com';
+    const fromEmail = (SMTP_FROM || SMTP_USER).trim();
+    const recipientEmail = (lead.targetEmail || 'suporte@centraldeapoio.com').trim();
 
     const htmlBody = `
       <!DOCTYPE html>
@@ -151,20 +167,54 @@ export async function sendLeadEmail(lead: ContactLead): Promise<{ sent: boolean;
       </html>
     `;
 
-    await transporter.sendMail({
-      from: `"Central de Apoio" <${fromEmail}>`,
-      to: recipientEmail,
-      subject: `[Novo Lead] ${lead.assunto || 'Atendimento'} - ${lead.nome}`,
-      html: htmlBody,
-      replyTo: lead.email || undefined,
-    });
+    return await new Promise<{ sent: boolean; message: string }>((resolve) => {
+      let isSettled = false;
 
-    return { sent: true, message: 'E-mail enviado com sucesso via SMTP.' };
+      const timer = setTimeout(() => {
+        if (!isSettled) {
+          isSettled = true;
+          try { transporter.close(); } catch (e) {}
+          resolve({
+            sent: false,
+            message: 'Timeout ao conectar com o servidor SMTP (4.5s). Verifique host/porta na Vercel.',
+          });
+        }
+      }, 4500);
+
+      transporter.sendMail(
+        {
+          from: `"Central de Apoio" <${fromEmail}>`,
+          to: recipientEmail,
+          subject: `[Novo Lead] ${lead.assunto || 'Atendimento'} - ${lead.nome}`,
+          html: htmlBody,
+          replyTo: lead.email || undefined,
+        },
+        (err: any, _info: any) => {
+          if (isSettled) return;
+          isSettled = true;
+          clearTimeout(timer);
+          try { transporter.close(); } catch (e) {}
+
+          if (err) {
+            console.error('[SMTP ERRO]', err);
+            resolve({
+              sent: false,
+              message: `Falha no envio SMTP: ${err.message || String(err)}`,
+            });
+          } else {
+            resolve({
+              sent: true,
+              message: 'E-mail enviado com sucesso via SMTP.',
+            });
+          }
+        }
+      );
+    });
   } catch (err: any) {
-    console.error('[SMTP ERRO] Falha ao enviar e-mail via Nodemailer:', err);
+    console.error('[SMTP CATCH ERRO]:', err);
     return {
       sent: false,
-      message: `Erro no servidor SMTP: ${err.message || 'Falha ao enviar e-mail.'}`,
+      message: `Erro ao processar envio: ${err.message || String(err)}`,
     };
   }
 }

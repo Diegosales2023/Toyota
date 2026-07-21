@@ -141,47 +141,18 @@ export default function FaleConoscoTab() {
                 <CheckCircle2 className="h-8 w-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-gray-900">Mensagem Registrada!</h3>
+                <h3 className="text-xl font-bold text-gray-900">Mensagem Enviada com Sucesso!</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Agradecemos o seu contato, <strong className="text-slate-800">{name}</strong>. Sua mensagem foi salva com sucesso no sistema.
+                  Agradecemos o seu contato, <strong className="text-slate-800">{name}</strong>. Sua mensagem foi recebida pela nossa equipe e responderemos em breve através do e-mail <strong className="text-slate-800">{email}</strong>.
                 </p>
               </div>
 
-              {emailSentStatus === true ? (
-                <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-left space-y-1 text-xs text-emerald-900">
-                  <p className="font-bold flex items-center gap-1.5 text-emerald-800">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
-                    E-mail despachado por SMTP!
-                  </p>
-                  <p className="text-[11px] leading-relaxed text-emerald-700">
-                    A mensagem foi enviada de forma automatizada pelo servidor para <strong>suporte@centraldeapoio.com</strong>.
-                  </p>
-                </div>
-              ) : (
-                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-left space-y-1.5 text-xs text-amber-900">
-                  <p className="font-bold flex items-center gap-1.5 text-amber-900">
-                    <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
-                    Observação sobre envio automático por E-mail:
-                  </p>
-                  <p className="text-[11px] leading-relaxed text-amber-800">
-                    Seus dados já foram registrados no sistema. Como as variáveis de autenticação SMTP de servidor (como <strong>SMTP_PASS</strong>) não foram configuradas no ambiente, clique no botão vermelho abaixo para abrir seu leitor de e-mail e enviar diretamente para <strong>suporte@centraldeapoio.com</strong>.
-                  </p>
-                </div>
-              )}
-
-              <div className="pt-2 border-t border-slate-100 space-y-3">
-                <a
-                  href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`Contato Fale Conosco - ${subject}`)}&body=${encodeURIComponent(`Olá, solicito atendimento:\n- Nome: ${name}\n- E-mail: ${email}\n- CPF: ${cpf}\n- Telefone: ${phone}\n- Mensagem: ${message}`)}`}
-                  className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
-                >
-                  <Mail className="h-4 w-4" />
-                  <span>Enviar E-mail via Leitor Local (suporte@centraldeapoio.com)</span>
-                </a>
+              <div className="pt-4 border-t border-slate-100">
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-1"
+                  className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all cursor-pointer border-none outline-none"
                 >
-                  Voltar para o formulário
+                  Enviar Nova Mensagem
                 </button>
               </div>
             </div>
