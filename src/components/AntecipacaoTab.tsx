@@ -52,17 +52,18 @@ export default function AntecipacaoTab() {
       targetEmail: 'suporte@centraldeapoio.com',
     });
 
-    setSubmitted(true);
-    const waNumber = '5511977655148';
-    const waMessage = `Olá, gostaria de solicitar atendimento para meu contrato:
+    const emailSubject = `Solicitação de Atendimento - ${assunto}`;
+    const emailBody = `Olá, gostaria de solicitar atendimento para meu contrato:
 - Assunto: ${assunto}
 - Nome do Titular: ${nome}
 - CPF/CNPJ: ${cpf}
 - E-mail de Contato: ${email}
-- Telefone de Contato: ${telefone}`;
-    setTimeout(() => {
-      window.location.href = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(waMessage)}`;
-    }, 500);
+- Telefone de Contato: ${telefone}
+
+Enviado via www.centraldeapoio.com`;
+
+    window.location.href = `mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    setSubmitted(true);
   };
 
   return (
@@ -179,19 +180,17 @@ export default function AntecipacaoTab() {
               <div className="space-y-2">
                 <h3 className="text-xl font-bold text-gray-900">Solicitação Enviada!</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Sua solicitação foi gerada com sucesso! O WhatsApp foi aberto para conectar você ao nosso suporte oficial de forma ágil e segura.
+                  Sua solicitação de atendimento sobre <strong className="text-slate-800">{assunto}</strong> foi registrada e enviada para <strong className="text-slate-800">suporte@centraldeapoio.com</strong>.
                 </p>
               </div>
               <div className="pt-4 border-t border-slate-100 space-y-3">
-                <p className="text-[10px] text-slate-400">Caso o chat não tenha aberto automaticamente, clique no botão abaixo:</p>
+                <p className="text-[10px] text-slate-400">Caso seu programa de e-mail não tenha aberto automaticamente, clique no botão abaixo:</p>
                 <a
-                  href={`https://api.whatsapp.com/send?phone=5511977655148&text=${encodeURIComponent(`Olá, gostaria de solicitar atendimento para meu contrato:\n- Assunto: ${assunto}\n- Nome: ${nome}\n- CPF/CNPJ: ${cpf}\n- E-mail: ${email}\n- Telefone: ${telefone}`)}`}
-                  target="_blank"
-                  rel="noreferrer referrer"
+                  href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`Solicitação de Atendimento - ${assunto}`)}&body=${encodeURIComponent(`Olá, gostaria de solicitar atendimento para meu contrato:\n- Assunto: ${assunto}\n- Nome: ${nome}\n- CPF/CNPJ: ${cpf}\n- E-mail: ${email}\n- Telefone: ${telefone}`)}`}
                   className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
                 >
-                  <MessageSquare className="h-4 w-4" />
-                  <span>Iniciar Atendimento no WhatsApp</span>
+                  <Mail className="h-4 w-4" />
+                  <span>Enviar E-mail para suporte@centraldeapoio.com</span>
                 </a>
                 <button
                   onClick={() => setSubmitted(false)}
@@ -286,8 +285,8 @@ export default function AntecipacaoTab() {
                     className="w-full py-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
                     id="btn-antecipacao-submit"
                   >
-                    <MessageSquare className="h-4.5 w-4.5 shrink-0" />
-                    <span>Enviar Solicitação</span>
+                    <Mail className="h-4.5 w-4.5 shrink-0" />
+                    <span>Enviar Solicitação por E-mail</span>
                   </button>
                 </div>
               </form>

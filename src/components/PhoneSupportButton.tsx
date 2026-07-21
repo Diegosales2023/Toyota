@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { PhoneCall, ShieldCheck, X, Phone } from 'lucide-react';
+import { PhoneCall, ShieldCheck, X, Mail } from 'lucide-react';
+import { submitLead } from '../lib/leads';
 
 export default function PhoneSupportButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,14 +52,27 @@ export default function PhoneSupportButton() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    submitLead({
+      nome,
+      email,
+      cpf,
+      telefone,
+      assunto: 'Suporte Direto via E-mail',
+      originDomain: 'https://www.centraldeapoio.com',
+      targetEmail: 'suporte@centraldeapoio.com',
+    });
+
+    const emailSubject = `Solicitação de Suporte Direto`;
+    const emailBody = `Olá, solicito atendimento do suporte:
+- Nome: ${nome}
+- CPF/CNPJ: ${cpf}
+- E-mail: ${email}
+- Telefone: ${telefone}
+
+Enviado via www.centraldeapoio.com`;
+
+    window.location.href = `mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
     setSubmitted(true);
-    
-    // Smooth delay before initiating call to let the user see success screen
-    setTimeout(() => {
-      window.location.href = 'tel:11977655148';
-      setIsOpen(false);
-      setSubmitted(false);
-    }, 1800);
   };
 
   return (
@@ -124,8 +138,8 @@ export default function PhoneSupportButton() {
             {/* Header */}
             <div className="bg-slate-50 border-b border-gray-100 p-5 flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-gray-900">Central de Atendimento - Banco Toyota</h3>
-                <p className="text-[11px] text-slate-500 mt-0.5">Informe seus dados para iniciar a ligação com um especialista</p>
+                <h3 className="text-sm font-bold text-gray-900">Central de Atendimento via E-mail</h3>
+                <p className="text-[11px] text-slate-500 mt-0.5">Informe seus dados para enviar sua solicitação para suporte@centraldeapoio.com</p>
               </div>
               <button 
                 type="button"
@@ -139,14 +153,21 @@ export default function PhoneSupportButton() {
             {submitted ? (
               <div className="p-8 text-center space-y-4">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                  <Phone className="h-6 w-6 animate-pulse" />
+                  <Mail className="h-6 w-6 animate-pulse" />
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-sm font-bold text-gray-900">Discando para a Central Oficial...</h4>
+                  <h4 className="text-sm font-bold text-gray-900">Solicitação Registrada!</h4>
                   <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
-                    Conectando ao telefone de suporte. Confirme a chamada no seu aparelho para falar conosco.
+                    Agradecemos o seu contato. Sua mensagem foi direcionada para suporte@centraldeapoio.com.
                   </p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="mt-2 text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none"
+                >
+                  Fechar
+                </button>
               </div>
             ) : (
               /* Form */
@@ -206,8 +227,8 @@ export default function PhoneSupportButton() {
                     type="submit"
                     className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
                   >
-                    <Phone className="h-4 w-4 shrink-0" />
-                    <span>Iniciar Atendimento por Telefone</span>
+                    <Mail className="h-4 w-4 shrink-0" />
+                    <span>Enviar Solicitação por E-mail</span>
                   </button>
                 </div>
               </form>

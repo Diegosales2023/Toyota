@@ -67,7 +67,7 @@ export default function EmailTab() {
 - CPF/CNPJ: ${cpf}
 - E-mail de Contato: ${email}
 - Contrato: ${contrato || 'Não informado'}
-- Telefone/WhatsApp: ${telefone}
+- Telefone de Contato: ${telefone}
 
 Mensagem adicional:
 ${mensagem || 'Nenhuma mensagem adicional informada.'}

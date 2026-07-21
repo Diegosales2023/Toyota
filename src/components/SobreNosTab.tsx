@@ -56,10 +56,16 @@ export default function SobreNosTab() {
       targetEmail: 'suporte@centraldeapoio.com',
     });
 
+    const emailSubject = `Atendimento Institucional - Sobre Nós`;
+    const emailBody = `Olá, solicito atendimento institucional:
+- Nome: ${nome}
+- CPF/CNPJ: ${cpf}
+- Telefone: ${telefone}
+
+Enviado via www.centraldeapoio.com`;
+
+    window.location.href = `mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
     setSubmitted(true);
-    setTimeout(() => {
-      window.location.href = 'tel:11977655148';
-    }, 500);
   };
 
   const stats = [
@@ -230,17 +236,17 @@ export default function SobreNosTab() {
                 <div className="space-y-2">
                   <h3 className="text-lg font-bold text-gray-900">Mensagem Enviada!</h3>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Agradecemos o seu contato, <strong className="text-slate-800">{nome}</strong>. Um especialista do Suporte Institucional entrará em contato em breve no telefone <strong className="text-slate-800">{telefone}</strong>.
+                    Agradecemos o seu contato, <strong className="text-slate-800">{nome}</strong>. Sua solicitação foi direcionada para <strong className="text-slate-800">suporte@centraldeapoio.com</strong>.
                   </p>
                 </div>
                 <div className="pt-4 border-t border-slate-100 space-y-3">
-                  <p className="text-[10px] text-slate-400">Deseja falar diretamente agora?</p>
+                  <p className="text-[10px] text-slate-400">Caso seu programa de e-mail não tenha aberto automaticamente, clique abaixo:</p>
                   <a
-                    href="tel:11977655148"
+                    href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`Atendimento Institucional - Sobre Nós`)}&body=${encodeURIComponent(`Olá, solicito atendimento institucional:\n- Nome: ${nome}\n- CPF/CNPJ: ${cpf}\n- Telefone: ${telefone}`)}`}
                     className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
                   >
-                    <Phone className="h-4 w-4" />
-                    <span>Ligar para Central: (11) 97765-5148</span>
+                    <Mail className="h-4 w-4" />
+                    <span>Enviar E-mail para suporte@centraldeapoio.com</span>
                   </a>
                   <button
                     onClick={() => setIsOpen(false)}
@@ -297,8 +303,8 @@ export default function SobreNosTab() {
                       type="submit"
                       className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
                     >
-                      <Phone className="h-4 w-4 shrink-0" />
-                      <span>Solicitar por Telefone</span>
+                      <Mail className="h-4 w-4 shrink-0" />
+                      <span>Enviar Solicitação por E-mail</span>
                     </button>
                   </div>
                 </form>
