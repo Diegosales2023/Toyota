@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, ShieldCheck, CheckCircle2, HelpCircle, Phone, Clock, Info, ArrowRight, FileText } from 'lucide-react';
+import { Mail, ShieldCheck, CheckCircle2, HelpCircle, Phone, Clock, Info, ArrowRight, FileText, AlertTriangle } from 'lucide-react';
 import { submitLead } from '../lib/leads';
 
 export default function EmailTab() {
@@ -11,6 +11,8 @@ export default function EmailTab() {
   const [assunto, setAssunto] = useState('2ª Via de Boleto');
   const [mensagem, setMensagem] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [emailSentStatus, setEmailSentStatus] = useState<boolean | null>(null);
 
   const formatCPFOrCNPJ = (value: string) => {
     const raw = value.replace(/\D/g, '');
@@ -42,11 +44,11 @@ export default function EmailTab() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Register lead in backend API
-    submitLead({
+    const result = await submitLead({
       nome,
       email,
       cpf,
@@ -58,27 +60,8 @@ export default function EmailTab() {
       targetEmail: 'suporte@centraldeapoio.com',
     });
 
-    // Prepare the mailto parameters
-    const recipient = 'suporte@centraldeapoio.com';
-    const emailSubject = `Solicitação de Atendimento - ${assunto}`;
-    const emailBody = `Olá, gostaria de solicitar atendimento para:
-- Serviço: ${assunto}
-- Nome do Titular: ${nome}
-- CPF/CNPJ: ${cpf}
-- E-mail de Contato: ${email}
-- Contrato: ${contrato || 'Não informado'}
-- Telefone de Contato: ${telefone}
-
-Mensagem adicional:
-${mensagem || 'Nenhuma mensagem adicional informada.'}
-
-Atenciosamente,
-${nome}`;
-
-    const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-
-    // Trigger mail client redirect
-    window.location.href = mailtoUrl;
+    setEmailSentStatus(result.emailSent ?? false);
+    setLoading(false);
     setSubmitted(true);
   };
 
@@ -167,16 +150,38 @@ ${nome}`;
         {/* Right Column - Form / Success State */}
         <div className="lg:col-span-7">
           {submitted ? (
-            <div className="bg-white border border-gray-100 shadow-md rounded-2xl p-6 sm:p-8 space-y-6 text-center py-12">
+            <div className="bg-white border border-gray-100 shadow-md rounded-2xl p-6 sm:p-8 space-y-6 text-center py-10">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                 <CheckCircle2 className="h-8 w-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-gray-900">Solicitação Iniciada!</h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  O seu cliente de e-mail foi aberto com os dados preenchidos. Caso não tenha aberto automaticamente, você pode enviar um e-mail para <strong className="text-slate-800">suporte@centraldeapoio.com</strong> com as seguintes informações:
+                <h3 className="text-xl font-bold text-gray-900">Solicitação Registrada!</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Sua solicitação sobre <strong className="text-slate-800">{assunto}</strong> foi gravada com sucesso no banco de dados do sistema (backup disponível em <strong>/api/contacts</strong>).
                 </p>
               </div>
+
+              {emailSentStatus === true ? (
+                <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-left space-y-1 text-xs text-emerald-900">
+                  <p className="font-bold flex items-center gap-1.5 text-emerald-800">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+                    E-mail despachado por SMTP!
+                  </p>
+                  <p className="text-[11px] leading-relaxed text-emerald-700">
+                    A mensagem foi enviada de forma automatizada pelo servidor para <strong>suporte@centraldeapoio.com</strong>.
+                  </p>
+                </div>
+              ) : (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-left space-y-1.5 text-xs text-amber-900">
+                  <p className="font-bold flex items-center gap-1.5 text-amber-900">
+                    <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
+                    Observação sobre envio automático por E-mail:
+                  </p>
+                  <p className="text-[11px] leading-relaxed text-amber-800">
+                    Seus dados já foram registrados no sistema. Como as variáveis de autenticação SMTP de servidor (como <strong>SMTP_PASS</strong>) não foram configuradas no ambiente, você pode enviar o e-mail via leitor local ou configurar o SMTP na Vercel.
+                  </p>
+                </div>
+              )}
 
               {/* Message Details Preview Card */}
               <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-5 text-left space-y-3">
@@ -197,21 +202,12 @@ ${nome}`;
                 </div>
               </div>
 
-              {/* Redirecionamentos Extras */}
-              <div className="pt-4 border-t border-slate-100 space-y-3">
-                <p className="text-[10px] text-slate-400">Caso seu programa de e-mail não tenha aberto automaticamente, clique abaixo:</p>
-                <a
-                  href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`Solicitação de Atendimento - ${assunto}`)}&body=${encodeURIComponent(`Olá, gostaria de solicitar atendimento para meu contrato:\n- Assunto: ${assunto}\n- Nome: ${nome}\n- CPF/CNPJ: ${cpf}\n- E-mail: ${email}\n- Contrato: ${contrato || 'Não informado'}\n- Telefone: ${telefone}\n\nMensagem: ${mensagem}`)}`}
-                  className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
-                >
-                  <Mail className="h-4 w-4" />
-                  <span>Enviar E-mail para suporte@centraldeapoio.com</span>
-                </a>
+              <div className="pt-2 border-t border-slate-100 space-y-3">
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-2 animate-pulse"
+                  className="text-xs text-slate-500 hover:text-slate-700 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-1"
                 >
-                  Voltar e alterar dados
+                  Voltar e enviar nova solicitação
                 </button>
               </div>
             </div>
@@ -325,10 +321,11 @@ ${nome}`;
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
+                    disabled={loading}
+                    className="w-full py-4 rounded-xl bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
                   >
                     <Mail className="h-4.5 w-4.5 shrink-0" />
-                    <span>Abrir Rascunho no E-mail</span>
+                    <span>{loading ? 'Registrando Solicitação...' : 'Enviar Solicitação por E-mail'}</span>
                   </button>
                 </div>
               </form>
