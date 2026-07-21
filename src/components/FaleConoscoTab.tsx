@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, PhoneCall, MapPin, Send, ShieldCheck, HelpCircle, AlertCircle, Clock, ChevronRight, Phone, CheckCircle2 } from 'lucide-react';
+import { Mail, PhoneCall, MapPin, Send, ShieldCheck, HelpCircle, AlertCircle, Clock, ChevronRight, Phone, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { submitLead } from '../lib/leads';
 
 export default function FaleConoscoTab() {
@@ -10,6 +10,8 @@ export default function FaleConoscoTab() {
   const [subject, setSubject] = useState('BOLETO');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [emailSentStatus, setEmailSentStatus] = useState<boolean | null>(null);
 
   const formatCPFOrCNPJ = (value: string) => {
     const raw = value.replace(/\D/g, '');
@@ -41,9 +43,10 @@ export default function FaleConoscoTab() {
     }
   };
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    submitLead({
+    setLoading(true);
+    const result = await submitLead({
       nome: name,
       email,
       cpf,
@@ -54,18 +57,8 @@ export default function FaleConoscoTab() {
       targetEmail: 'suporte@centraldeapoio.com',
     });
 
-    const emailSubject = `Contato Fale Conosco - ${subject}`;
-    const emailBody = `Olá, solicito atendimento Fale Conosco:
-- Assunto: ${subject}
-- Nome: ${name}
-- CPF/CNPJ: ${cpf}
-- E-mail: ${email}
-- Telefone: ${phone}
-- Mensagem: ${message}
-
-Enviado via www.centraldeapoio.com`;
-
-    window.location.href = `mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    setEmailSentStatus(result.emailSent ?? false);
+    setLoading(false);
     setSubmitted(true);
   };
 
@@ -143,28 +136,50 @@ Enviado via www.centraldeapoio.com`;
               {/* Right column: Form / Success Screen */}
         <div className="lg:col-span-7">
           {submitted ? (
-            <div className="bg-white border border-gray-100 shadow-md rounded-2xl p-6 sm:p-8 space-y-6 text-center py-12">
+            <div className="bg-white border border-gray-100 shadow-md rounded-2xl p-6 sm:p-8 space-y-6 text-center py-10">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                 <CheckCircle2 className="h-8 w-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-gray-900">Mensagem Enviada!</h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Agradecemos o seu contato, <strong className="text-slate-800">{name}</strong>. Sua mensagem foi enviada para <strong className="text-slate-800">suporte@centraldeapoio.com</strong>.
+                <h3 className="text-xl font-bold text-gray-900">Mensagem Registrada!</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Agradecemos o seu contato, <strong className="text-slate-800">{name}</strong>. Sua mensagem foi salva com sucesso no sistema.
                 </p>
               </div>
-              <div className="pt-4 border-t border-slate-100 space-y-3">
-                <p className="text-[10px] text-slate-400">Caso seu programa de e-mail não tenha aberto automaticamente, clique abaixo:</p>
+
+              {emailSentStatus === true ? (
+                <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-left space-y-1 text-xs text-emerald-900">
+                  <p className="font-bold flex items-center gap-1.5 text-emerald-800">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+                    E-mail despachado por SMTP!
+                  </p>
+                  <p className="text-[11px] leading-relaxed text-emerald-700">
+                    A mensagem foi enviada de forma automatizada pelo servidor para <strong>suporte@centraldeapoio.com</strong>.
+                  </p>
+                </div>
+              ) : (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-left space-y-1.5 text-xs text-amber-900">
+                  <p className="font-bold flex items-center gap-1.5 text-amber-900">
+                    <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
+                    Observação sobre envio automático por E-mail:
+                  </p>
+                  <p className="text-[11px] leading-relaxed text-amber-800">
+                    Seus dados já foram registrados no sistema. Como as variáveis de autenticação SMTP de servidor (como <strong>SMTP_PASS</strong>) não foram configuradas no ambiente, clique no botão vermelho abaixo para abrir seu leitor de e-mail e enviar diretamente para <strong>suporte@centraldeapoio.com</strong>.
+                  </p>
+                </div>
+              )}
+
+              <div className="pt-2 border-t border-slate-100 space-y-3">
                 <a
                   href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`Contato Fale Conosco - ${subject}`)}&body=${encodeURIComponent(`Olá, solicito atendimento:\n- Nome: ${name}\n- E-mail: ${email}\n- CPF: ${cpf}\n- Telefone: ${phone}\n- Mensagem: ${message}`)}`}
                   className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
                 >
                   <Mail className="h-4 w-4" />
-                  <span>Enviar E-mail para suporte@centraldeapoio.com</span>
+                  <span>Enviar E-mail via Leitor Local (suporte@centraldeapoio.com)</span>
                 </a>
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-2"
+                  className="text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-1"
                 >
                   Voltar para o formulário
                 </button>
@@ -264,10 +279,11 @@ Enviado via www.centraldeapoio.com`;
 
                 <button
                   type="submit"
-                  className="w-full rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 px-4 text-xs shadow-md shadow-red-200 transition-all flex items-center justify-center space-x-2 cursor-pointer mt-2 border-none outline-none"
+                  disabled={loading}
+                  className="w-full rounded-xl bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-bold py-3.5 px-4 text-xs shadow-md shadow-red-200 transition-all flex items-center justify-center space-x-2 cursor-pointer mt-2 border-none outline-none"
                 >
                   <Mail className="h-4 w-4" />
-                  <span>Enviar Solicitação por E-mail</span>
+                  <span>{loading ? 'Registrando Solicitação...' : 'Enviar Solicitação por E-mail'}</span>
                 </button>
               </form>
 

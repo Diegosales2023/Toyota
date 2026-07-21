@@ -74,6 +74,7 @@ export default async function handler(req: any, res: any) {
         ? 'Contato registrado e e-mail despachado com sucesso para a administração.' 
         : 'Contato registrado no backup local com sucesso.',
       leadId: newLead.id,
+      emailSent: emailStatus.sent,
       emailStatus: emailStatus.message,
       lead: newLead,
     });

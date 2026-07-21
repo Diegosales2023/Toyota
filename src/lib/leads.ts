@@ -13,7 +13,14 @@ export interface LeadData {
   createdAt?: string;
 }
 
-export async function submitLead(lead: LeadData): Promise<boolean> {
+export interface SubmitLeadResponse {
+  success: boolean;
+  emailSent?: boolean;
+  emailStatus?: string;
+  message?: string;
+}
+
+export async function submitLead(lead: LeadData): Promise<SubmitLeadResponse> {
   const payload: LeadData = {
     ...lead,
     originDomain: lead.originDomain || 'https://www.centraldeapoio.com',
@@ -31,15 +38,22 @@ export async function submitLead(lead: LeadData): Promise<boolean> {
       body: JSON.stringify(payload),
     });
 
+    const data = await response.json().catch(() => ({}));
+
     if (!response.ok) {
       console.warn('Falha ao registrar lead no servidor:', response.statusText);
-      return false;
+      return { success: false, message: data.error || response.statusText };
     }
 
-    return true;
-  } catch (error) {
+    return {
+      success: true,
+      emailSent: data.emailSent ?? data.lead?.emailSent,
+      emailStatus: data.emailStatus,
+      message: data.message,
+    };
+  } catch (error: any) {
     console.error('Erro ao enviar lead para o servidor:', error);
-    return false;
+    return { success: false, message: error?.message || 'Erro de conexão' };
   }
 }
 

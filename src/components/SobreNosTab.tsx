@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Award, ShieldCheck, Users, Milestone, HeartHandshake, PhoneCall, CheckCircle2, Phone } from 'lucide-react';
+import { Building2, Award, ShieldCheck, Users, Milestone, HeartHandshake, PhoneCall, CheckCircle2, Phone, Mail } from 'lucide-react';
 import { submitLead } from '../lib/leads';
 
 export default function SobreNosTab() {
