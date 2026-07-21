@@ -1,3 +1,5 @@
+import { getApiUrl } from './api';
+
 export interface LeadData {
   nome: string;
   email: string;
@@ -20,7 +22,8 @@ export async function submitLead(lead: LeadData): Promise<boolean> {
   };
 
   try {
-    const response = await fetch('/api/leads', {
+    const targetUrl = getApiUrl('/api/contact');
+    const response = await fetch(targetUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -39,3 +42,4 @@ export async function submitLead(lead: LeadData): Promise<boolean> {
     return false;
   }
 }
+
