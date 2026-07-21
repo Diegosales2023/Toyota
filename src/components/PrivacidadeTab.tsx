@@ -54,7 +54,7 @@ export default function PrivacidadeTab() {
             <ul className="list-disc pl-5 space-y-1">
               <li>Dados de Identificação: Nome completo, CPF, RG ou CNPJ.</li>
               <li>Dados de Contrato: Número do contrato de financiamento, placa do veículo ou chassi.</li>
-              <li>Dados de Contato: Número de telefone celular (para direcionamento via WhatsApp) e e-mail.</li>
+              <li>Dados de Contato: Número de telefone de contato (para ligações de suporte) e e-mail.</li>
             </ul>
           </div>
 
@@ -68,16 +68,16 @@ export default function PrivacidadeTab() {
             <ul className="list-disc pl-5 space-y-1">
               <li>Autenticar sua identidade nos sistemas financeiros e evitar fraudes ou acessos não autorizados.</li>
               <li>Calcular os descontos de juros de amortizações de acordo com as regras contratuais e do CDC.</li>
-              <li>Facilitar o direcionamento seguro de solicitações para atendimento humano ou automatizado no WhatsApp institucional.</li>
+              <li>Facilitar o direcionamento seguro de solicitações para atendimento humano em nossa central telefônica.</li>
             </ul>
           </div>
 
           <div className="space-y-2">
             <h3 className="font-bold text-sm text-gray-900 flex items-center gap-1.5 border-b border-gray-100 pb-2">
-              <FileText className="h-4 w-4 text-slate-400" /> 3. Compartilhamento e Direcionamento via WhatsApp
+              <FileText className="h-4 w-4 text-slate-400" /> 3. Compartilhamento e Atendimento Telefônico
             </h3>
             <p>
-              Ao utilizar as ferramentas de solicitação rápida e preencher seus dados, você está ciente de que as informações fornecidas serão formatadas e enviadas de forma voluntária ao nosso canal de atendimento integrado no WhatsApp para dar andamento à sua solicitação de boleto ou negociação.
+              Ao utilizar as ferramentas de solicitação rápida e preencher seus dados, você está ciente de que as informações fornecidas serão formatadas e utilizadas de forma voluntária por nossa central de atendimento telefônico oficial para dar andamento à sua solicitação de boleto ou negociação.
             </p>
             <p>
               Garantimos que nenhum dado é vendido a terceiros ou utilizado para fins de marketing sem o seu consentimento prévio e explícito.

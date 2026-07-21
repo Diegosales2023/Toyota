@@ -1,7 +1,56 @@
-import React from 'react';
-import { Building2, Award, ShieldCheck, Users, Milestone, HeartHandshake, PhoneCall, CheckCircle2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Building2, Award, ShieldCheck, Users, Milestone, HeartHandshake, PhoneCall, CheckCircle2, Phone } from 'lucide-react';
 
 export default function SobreNosTab() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [nome, setNome] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const formatCPFOrCNPJ = (value: string) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 11) {
+      return raw
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } else {
+      return raw
+        .substring(0, 14)
+        .replace(/^(\d{2})(\d)/, '$1.$2')
+        .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/\.(\d{3})(\d)/, '.$1/$2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+  };
+
+  const formatPhone = (value: string) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 10) {
+      return raw
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d{4})$/, '$1-$2');
+    } else {
+      return raw
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d{4})$/, '$1-$2');
+    }
+  };
+
+  const handleOpenModal = () => {
+    setSubmitted(false);
+    setIsOpen(true);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      window.location.href = 'tel:11977655148';
+    }, 500);
+  };
+
   const stats = [
     { label: 'Clientes Atendidos', value: '+1 Milhão' },
     { label: 'Anos no Brasil', value: '+20 Anos' },
@@ -118,7 +167,7 @@ export default function SobreNosTab() {
             <div className="absolute -left-[31px] top-3 h-3 w-3 rounded-full bg-red-600 ring-4 ring-white" />
             <span className="font-mono text-xs font-bold text-red-600">2023 - Presente</span>
             <h4 className="font-bold text-xs text-gray-950">Digitalização e Segurança Antifraude</h4>
-            <p className="text-[11px] text-slate-500">Expansão de canais de autoatendimento integrados ao WhatsApp com criptografia e assistentes inteligentes de suporte em tempo real.</p>
+            <p className="text-[11px] text-slate-500">Expansão de canais de autoatendimento integrados por telefone com criptografia e assistentes inteligentes de suporte em tempo real.</p>
           </div>
         </div>
       </div>
@@ -131,17 +180,126 @@ export default function SobreNosTab() {
           Nosso relacionamento vai além do financiamento do seu carro. Se você precisa de qualquer auxílio corporativo, nossa central de relacionamento está sempre aberta para você.
         </p>
         <div className="pt-2">
-          <a 
-            href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-6 py-3 shadow-md shadow-red-200 transition-all cursor-pointer text-center"
+          <button 
+            onClick={handleOpenModal}
+            className="inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-6 py-3 shadow-md shadow-red-200 transition-all cursor-pointer text-center border-none outline-none"
           >
             <PhoneCall className="h-4 w-4" />
             <span>Falar com Atendimento Oficial</span>
-          </a>
+          </button>
         </div>
       </div>
+
+      {/* Modal / Dialog Form */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in" id="sobrenos-modal">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
+            {/* Header */}
+            <div className="bg-slate-50 border-b border-gray-100 p-5 flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-gray-900">Atendimento Oficial</h3>
+                <p className="text-[11px] text-slate-500 mt-0.5">Suporte Institucional & Ouvidoria</p>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="p-1 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all border-none bg-transparent outline-none cursor-pointer"
+              >
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {submitted ? (
+              <div className="p-8 text-center space-y-6">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                  <CheckCircle2 className="h-8 w-8" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-bold text-gray-900">Mensagem Enviada!</h3>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Agradecemos o seu contato, <strong className="text-slate-800">{nome}</strong>. Um especialista do Suporte Institucional entrará em contato em breve no telefone <strong className="text-slate-800">{telefone}</strong>.
+                  </p>
+                </div>
+                <div className="pt-4 border-t border-slate-100 space-y-3">
+                  <p className="text-[10px] text-slate-400">Deseja falar diretamente agora?</p>
+                  <a
+                    href="tel:11977655148"
+                    className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
+                  >
+                    <Phone className="h-4 w-4" />
+                    <span>Ligar para Central: (11) 97765-5148</span>
+                  </a>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-2"
+                  >
+                    Fechar Janela
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* Form */}
+                <form onSubmit={handleSubmit} className="p-5 space-y-4 overflow-y-auto">
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-gray-700">Nome do Titular</label>
+                    <input
+                      type="text"
+                      value={nome}
+                      onChange={(e) => setNome(e.target.value)}
+                      placeholder="Nome completo do titular"
+                      className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-gray-700">CPF ou CNPJ</label>
+                    <input
+                      type="text"
+                      value={cpf}
+                      onChange={(e) => setCpf(formatCPFOrCNPJ(e.target.value))}
+                      placeholder="000.000.000-00 ou 00.000.000/0000-00"
+                      className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                      maxLength={18}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-gray-700">Telefone de Contato</label>
+                    <input
+                      type="tel"
+                      value={telefone}
+                      onChange={(e) => setTelefone(formatPhone(e.target.value))}
+                      placeholder="(00) 00000-0000"
+                      className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                      maxLength={15}
+                      required
+                    />
+                  </div>
+
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
+                    >
+                      <Phone className="h-4 w-4 shrink-0" />
+                      <span>Solicitar por Telefone</span>
+                    </button>
+                  </div>
+                </form>
+
+                <div className="bg-slate-50 p-4 border-t border-gray-100 text-[10px] text-slate-500 text-center leading-normal">
+                  Seus dados estão protegidos por criptografia em conformidade com a LGPD e serão utilizados exclusivamente para direcionar seu atendimento oficial.
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

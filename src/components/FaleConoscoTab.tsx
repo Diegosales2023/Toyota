@@ -1,18 +1,51 @@
 import React, { useState } from 'react';
-import { Mail, PhoneCall, MapPin, Send, ShieldCheck, HelpCircle, AlertCircle, Clock, ChevronRight } from 'lucide-react';
+import { Mail, PhoneCall, MapPin, Send, ShieldCheck, HelpCircle, AlertCircle, Clock, ChevronRight, Phone, CheckCircle2 } from 'lucide-react';
 
 export default function FaleConoscoTab() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [subject, setSubject] = useState('DUVIDAS');
+  const [cpf, setCpf] = useState('');
+  const [subject, setSubject] = useState('BOLETO');
   const [message, setMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const formatCPFOrCNPJ = (value: string) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 11) {
+      return raw
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } else {
+      return raw
+        .substring(0, 14)
+        .replace(/^(\d{2})(\d)/, '$1.$2')
+        .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/\.(\d{3})(\d)/, '.$1/$2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+  };
+
+  const formatPhone = (value: string) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 10) {
+      return raw
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d{4})$/, '$1-$2');
+    } else {
+      return raw
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d{4})$/, '$1-$2');
+    }
+  };
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const formattedText = `Nome: ${name}%0AEmail: ${email}%0ATelefone: ${phone}%0AAssunto: ${subject}%0AMensagem: ${message}`;
-    const url = `https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento%0A%0A${formattedText}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    setSubmitted(true);
+    setTimeout(() => {
+      window.location.href = 'tel:11977655148';
+    }, 500);
   };
 
   const contactChannels = [
@@ -86,82 +119,98 @@ export default function FaleConoscoTab() {
             </div>
           </div>
         </div>
-
-        {/* Right column: Form */}
+              {/* Right column: Form / Success Screen */}
         <div className="lg:col-span-7">
-          <div className="bg-white border border-gray-100 shadow-md shadow-gray-100/50 rounded-2xl p-6 sm:p-8 space-y-6">
-            <div className="space-y-1">
-              <h3 className="text-lg font-bold text-gray-950">Atendimento Direto ou Envio de Formulário</h3>
-              <p className="text-xs text-slate-400">
-                Inicie um suporte imediato pelo canal direto ou preencha o formulário abaixo para gerar uma mensagem personalizada de abertura de chamado.
-              </p>
-            </div>
-
-            <div className="space-y-4 pb-6 border-b border-gray-100">
-              <a 
-                href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center"
-                id="btn-whatsapp-fale-conosco-direct"
-              >
-                <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.588 2.01 14.12 1.01 11.5 1.01c-5.436 0-9.86 4.37-9.864 9.8 0 1.637.452 3.23 1.309 4.633L1.925 21.8l6.452-1.68c.31.08.31.08-.01.08zM17.51 14.39c-.3-.149-1.762-.87-2.034-.97-.27-.1-.47-.149-.669.149-.2.3-.764.96-.938 1.16-.17.2-.34.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.785-1.48-1.76-1.65-2.059-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.38-.02-.53-.07-.15-.67-1.62-.92-2.22-.24-.59-.49-.51-.67-.52-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.03 1.01-1.03 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.09 3.2 5.07 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.11.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.08-.12-.29-.2-.59-.35z"/>
-                </svg>
-                <span>Falar com Atendimento Direto no WhatsApp</span>
-              </a>
-
-              <div className="text-center space-y-1">
-                <span className="text-[10px] text-slate-500 block">Link de redirecionamento direto:</span>
-                <a 
-                  href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold underline break-all block"
+          {submitted ? (
+            <div className="bg-white border border-gray-100 shadow-md rounded-2xl p-6 sm:p-8 space-y-6 text-center py-12">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                <CheckCircle2 className="h-8 w-8" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-gray-900">Mensagem Enviada!</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Agradecemos o seu contato, <strong className="text-slate-800">{name}</strong>. Um de nossos especialistas de suporte entrará em contato em breve no telefone <strong className="text-slate-800">{phone}</strong>.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-slate-100 space-y-3">
+                <p className="text-[10px] text-slate-400">Se precisar de atendimento urgente, ligue para nossa Central:</p>
+                <a
+                  href="tel:11977655148"
+                  className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
                 >
-                  https://wa.me/5511977655148
+                  <Phone className="h-4 w-4" />
+                  <span>Ligar para Central: (11) 97765-5148</span>
                 </a>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-2"
+                >
+                  Voltar para o formulário
+                </button>
               </div>
             </div>
-
-            <form onSubmit={handleContactSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-700">Seu Nome</label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Seu nome completo"
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-700">Seu E-mail</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="exemplo@email.com"
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
-                    required
-                  />
-                </div>
+          ) : (
+            <div className="bg-white border border-gray-100 shadow-md shadow-gray-100/50 rounded-2xl p-6 sm:p-8 space-y-6">
+              <div className="space-y-1">
+                <h3 className="text-lg font-bold text-gray-950">Atendimento via Formulário</h3>
+                <p className="text-xs text-slate-400">
+                  Preencha o formulário abaixo para enviar sua mensagem de suporte diretamente para nossa equipe especializada.
+                </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-700">Telefone / WhatsApp</label>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="(00) 00000-0000"
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
-                    required
-                  />
+              <form onSubmit={handleContactSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-gray-700">Seu Nome</label>
+                    <input
+                       type="text"
+                       value={name}
+                       onChange={(e) => setName(e.target.value)}
+                       placeholder="Seu nome completo"
+                       className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                       required
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-gray-700">Seu E-mail</label>
+                    <input
+                       type="email"
+                       value={email}
+                       onChange={(e) => setEmail(e.target.value)}
+                       placeholder="exemplo@email.com"
+                       className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                       required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-gray-700">Telefone de Contato</label>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(formatPhone(e.target.value))}
+                      placeholder="(00) 00000-0000"
+                      maxLength={15}
+                      className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-gray-700">CPF ou CNPJ do Titular</label>
+                    <input
+                      type="text"
+                      value={cpf}
+                      onChange={(e) => setCpf(formatCPFOrCNPJ(e.target.value))}
+                      placeholder="000.000.000-00"
+                      maxLength={18}
+                      className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">
@@ -171,44 +220,45 @@ export default function FaleConoscoTab() {
                     onChange={(e) => setSubject(e.target.value)}
                     className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800 font-semibold"
                   >
-                    <option value="DUVIDAS">Dúvidas Gerais</option>
-                    <option value="RECLAMACOES">Reclamações / Ouvidoria</option>
-                    <option value="NEGOCIACAO">Negociação de Financiamento</option>
-                    <option value="BOLETO">Problema com Boletos</option>
-                    <option value="SUGESTOES">Sugestões e Elogios</option>
+                    <option value="BOLETO">2ª Via de Boleto</option>
+                    <option value="QUITACAO">Quitação de Contrato</option>
+                    <option value="PARCELAMENTO">Parcelamento / Renegociação</option>
+                    <option value="ANTECIPACAO">Antecipação de Parcelas</option>
+                    <option value="NEGOCIARDIVIDA">Negociar Dívida</option>
+                    <option value="DUVIDAS">Dúvidas Gerais / Outros</option>
                   </select>
                 </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-700">Mensagem</label>
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Descreva sua solicitação ou dúvida detalhadamente..."
+                    rows={4}
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800 resize-none"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 px-4 text-xs shadow-md shadow-red-200 transition-all flex items-center justify-center space-x-2 cursor-pointer mt-2 border-none outline-none"
+                >
+                  <Phone className="h-4 w-4" />
+                  <span>Enviar Solicitação</span>
+                </button>
+              </form>
+
+              <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-[10px] text-slate-400">
+                <span className="flex items-center gap-1">
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+                  Segurança ponta a ponta
+                </span>
+                <span>Canal de suporte oficial</span>
               </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700">Mensagem</label>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Descreva sua solicitação ou dúvida detalhadamente..."
-                  rows={4}
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800 resize-none"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 px-4 text-xs shadow-md shadow-red-200 transition-all flex items-center justify-center space-x-2 cursor-pointer mt-2"
-              >
-                <Send className="h-4 w-4" />
-                <span>Enviar Solicitação via WhatsApp</span>
-              </button>
-            </form>
-
-            <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-[10px] text-slate-400">
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-                Segurança ponta a ponta
-              </span>
-              <span>Canal de suporte oficial</span>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

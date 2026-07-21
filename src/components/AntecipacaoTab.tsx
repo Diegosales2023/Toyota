@@ -1,11 +1,76 @@
-import React from 'react';
-import { CalendarRange, Percent, ShieldCheck, HelpCircle, Info, AlertTriangle, ChevronRight, CheckCircle2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { CalendarRange, Percent, ShieldCheck, HelpCircle, Info, AlertTriangle, ChevronRight, CheckCircle2, Phone, Mail, MessageSquare } from 'lucide-react';
 
 export default function AntecipacaoTab() {
-  const handleWhatsAppRedirect = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    const url = 'https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento%20-%20Antecipacao%20de%20Parcelas';
-    window.open(url, '_blank', 'noopener,noreferrer');
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [contactMethod, setContactMethod] = useState<'phone' | 'whatsapp' | 'email'>('whatsapp');
+
+  const formatCPFOrCNPJ = (value: string) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 11) {
+      return raw
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } else {
+      return raw
+        .substring(0, 14)
+        .replace(/^(\d{2})(\d)/, '$1.$2')
+        .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/\.(\d{3})(\d)/, '.$1/$2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+  };
+
+  const formatPhone = (value: string) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 10) {
+      return raw
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d{4})$/, '$1-$2');
+    } else {
+      return raw
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d{4})$/, '$1-$2');
+    }
+  };
+
+  const handleAntecipacaoSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    if (contactMethod === 'phone') {
+      setTimeout(() => {
+        window.location.href = 'tel:11977655148';
+      }, 500);
+    } else if (contactMethod === 'whatsapp') {
+      const waNumber = '5511977655148';
+      const waMessage = `Olá, gostaria de solicitar uma simulação e boleto para a Antecipação de parcelas do meu contrato:
+- Nome do Titular: ${nome}
+- CPF/CNPJ: ${cpf}
+- E-mail de Contato: ${email}
+- Telefone de Contato: ${telefone}`;
+      setTimeout(() => {
+        window.location.href = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(waMessage)}`;
+      }, 500);
+    } else {
+      const recipient = 'atendimento@bancotoyota.com.br';
+      const emailSubject = `Solicitação de Antecipação de Parcelas - ${nome}`;
+      const emailBody = `Olá, gostaria de solicitar uma simulação e boleto para a Antecipação de parcelas do meu contrato:
+- Nome do Titular: ${nome}
+- CPF/CNPJ: ${cpf}
+- E-mail de Contato: ${email}
+- Telefone de Contato: ${telefone}
+
+Atenciosamente,
+${nome}`;
+      setTimeout(() => {
+        window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      }, 500);
+    }
   };
 
   return (
@@ -112,77 +177,207 @@ export default function AntecipacaoTab() {
 
         </div>
 
-        {/* Right Column - WhatsApp Direct Information Panel */}
+        {/* Right Column - Interactive Form Panel / Success Screen */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white border border-gray-100 shadow-md shadow-gray-100/50 rounded-2xl p-6 sm:p-8 space-y-6">
-            <div className="space-y-1.5">
-              <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/10">
-                Canal WhatsApp Ativo
-              </span>
-              <h3 className="text-xl font-bold text-gray-900">Antecipação via WhatsApp</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Inicie a simulação do seu abatimento proporcional de juros com nossa assistente virtual Kira. Ela gerará os demonstrativos oficiais de cálculo.
-              </p>
-            </div>
-
-            <div className="space-y-4 border-t border-slate-100 pt-4">
-              <h4 className="font-bold text-xs text-slate-800">Como funciona o atendimento de antecipação:</h4>
-              
-              <ul className="space-y-2.5 text-xs text-slate-600">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                  <span>Escolha adiantar parcelas específicas ou da última para trás</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                  <span>Cálculo eletrônico instantâneo de abatimento de juros</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                  <span>Geração de boleto oficial seguro e rastreável</span>
-                </li>
-              </ul>
-
-              <div className="p-3 bg-emerald-50/50 border border-emerald-100/40 rounded-xl text-[11px] text-emerald-800">
-                <p className="font-bold">Agilidade no atendimento:</p>
-                <p>O processo é finalizado em menos de 3 minutos sem burocracia ou envio de senhas.</p>
+          {submitted ? (
+            <div className="bg-white border border-gray-100 shadow-md rounded-2xl p-6 sm:p-8 space-y-6 text-center py-12">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                <CheckCircle2 className="h-8 w-8" />
               </div>
-            </div>
-
-            <div className="space-y-4">
-              <a 
-                href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-4 text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center"
-              >
-                <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.588 2.01 14.12 1.01 11.5 1.01c-5.436 0-9.86 4.37-9.864 9.8 0 1.637.452 3.23 1.309 4.633L1.925 21.8l6.452-1.68c.31.08.31.08-.01.08zM17.51 14.39c-.3-.149-1.762-.87-2.034-.97-.27-.1-.47-.149-.669.149-.2.3-.764.96-.938 1.16-.17.2-.34.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.785-1.48-1.76-1.65-2.059-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.38-.02-.53-.07-.15-.67-1.62-.92-2.22-.24-.59-.49-.51-.67-.52-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.03 1.01-1.03 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.09 3.2 5.07 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.11.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.08-.12-.29-.2-.59-.35z"/>
-                </svg>
-                <span>Simular Antecipação no WhatsApp</span>
-              </a>
-
-              <div className="text-center space-y-1">
-                <span className="text-[10px] text-slate-500 block">Link de redirecionamento direto:</span>
-                <a 
-                  href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold underline break-all block"
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-gray-900">Solicitação Enviada!</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  {contactMethod === 'phone' ? (
+                    <>Seus dados foram cadastrados com sucesso. Um especialista de atendimento entrará em contato no telefone <strong className="text-slate-800">{telefone}</strong> para simular seus descontos.</>
+                  ) : contactMethod === 'whatsapp' ? (
+                    <>Sua solicitação foi gerada com sucesso! O WhatsApp foi aberto para que você envie seus dados diretamente ao nosso suporte oficial de forma ágil e segura.</>
+                  ) : (
+                    <>Sua solicitação foi gerada com sucesso! O rascunho de e-mail para antecipação de parcelas foi criado. Envie a mensagem diretamente para <strong className="text-slate-800">atendimento@bancotoyota.com.br</strong>.</>
+                  )}
+                </p>
+              </div>
+              <div className="pt-4 border-t border-slate-100 space-y-3">
+                {contactMethod === 'phone' ? (
+                  <>
+                    <p className="text-[10px] text-slate-400">Caso queira ligar diretamente para agilizar:</p>
+                    <a
+                      href="tel:11977655148"
+                      className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
+                    >
+                      <Phone className="h-4 w-4" />
+                      <span>Ligar para Central: (11) 97765-5148</span>
+                    </a>
+                  </>
+                ) : contactMethod === 'whatsapp' ? (
+                  <>
+                    <p className="text-[10px] text-slate-400">Caso o chat do WhatsApp não tenha aberto automaticamente, clique no botão abaixo:</p>
+                    <a
+                      href={`https://api.whatsapp.com/send?phone=5511977655148&text=${encodeURIComponent(`Olá, gostaria de solicitar uma simulação e boleto para a Antecipação de parcelas do meu contrato:\n- Nome: ${nome}\n- CPF/CNPJ: ${cpf}\n- E-mail: ${email}\n- Telefone: ${telefone}`)}`}
+                      target="_blank"
+                      rel="noreferrer referrer"
+                      className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                      <span>Enviar via WhatsApp</span>
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-[10px] text-slate-400">Caso o seu cliente de e-mail não tenha aberto, envie diretamente para:</p>
+                    <a
+                      href={`mailto:atendimento@bancotoyota.com.br?subject=Solicitação de Antecipação de Parcelas - ${nome}&body=${encodeURIComponent(`Olá, gostaria de solicitar uma simulação e boleto para a Antecipação de parcelas do meu contrato:\n- Nome do Titular: ${nome}\n- CPF/CNPJ: ${cpf}\n- E-mail de Contato: ${email}\n- Telefone de Contato: ${telefone}\n\nAtenciosamente,\n${nome}`)}`}
+                      className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
+                    >
+                      <Mail className="h-4 w-4" />
+                      <span>Reabrir E-mail de Suporte</span>
+                    </a>
+                  </>
+                )}
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-2"
                 >
-                  https://wa.me/5511977655148
-                </a>
+                  Voltar para o formulário
+                </button>
               </div>
             </div>
+          ) : (
+            <div className="bg-white border border-gray-100 shadow-md shadow-gray-100/50 rounded-2xl p-6 sm:p-8 space-y-6">
+              <div className="space-y-1.5">
+                <span className="inline-flex items-center rounded-md bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                  Formulário de Solicitação
+                </span>
+                <h3 className="text-xl font-bold text-gray-900">Antecipar Parcelas</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Escolha o canal de preferência e preencha os dados do titular do contrato abaixo para simular os descontos oficiais de antecipação.
+                </p>
+              </div>
 
-            <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-[10px] text-slate-400">
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-                Conexão Segura SSL
-              </span>
-              <span>Resposta em menos de 1 min</span>
+              {/* Canal Selection Tabs */}
+              <div className="flex rounded-xl bg-slate-100/80 p-1 gap-1" id="antecipacao-contact-tabs">
+                <button
+                  type="button"
+                  onClick={() => setContactMethod('whatsapp')}
+                  className={`flex-1 py-2.5 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-1 border-none cursor-pointer outline-none ${
+                    contactMethod === 'whatsapp'
+                      ? 'bg-white text-red-600 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <MessageSquare className="h-3.5 w-3.5" />
+                  WhatsApp
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setContactMethod('email')}
+                  className={`flex-1 py-2.5 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-1 border-none cursor-pointer outline-none ${
+                    contactMethod === 'email'
+                      ? 'bg-white text-red-600 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  E-mail
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setContactMethod('phone')}
+                  className={`flex-1 py-2.5 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-1 border-none cursor-pointer outline-none ${
+                    contactMethod === 'phone'
+                      ? 'bg-white text-red-600 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <Phone className="h-3.5 w-3.5" />
+                  Telefone
+                </button>
+              </div>
+
+              <form onSubmit={handleAntecipacaoSubmit} className="space-y-4 pt-2">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-700">Nome do Titular</label>
+                  <input
+                    type="text"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    placeholder="Nome completo do titular"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-700">Seu E-mail de Contato</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="exemplo@email.com"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-700">CPF ou CNPJ</label>
+                  <input
+                    type="text"
+                    value={cpf}
+                    onChange={(e) => setCpf(formatCPFOrCNPJ(e.target.value))}
+                    placeholder="000.000.000-00 ou 00.000.000/0000-00"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                    maxLength={18}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-700">Telefone de Contato</label>
+                  <input
+                    type="tel"
+                    value={telefone}
+                    onChange={(e) => setTelefone(formatPhone(e.target.value))}
+                    placeholder="(00) 00000-0000"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                    maxLength={15}
+                    required
+                  />
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    className="w-full py-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
+                  >
+                    {contactMethod === 'phone' ? (
+                      <>
+                        <Phone className="h-4.5 w-4.5 shrink-0" />
+                        <span>Simular Antecipação por Telefone</span>
+                      </>
+                    ) : contactMethod === 'whatsapp' ? (
+                      <>
+                        <MessageSquare className="h-4.5 w-4.5 shrink-0" />
+                        <span>Simular Antecipação por WhatsApp</span>
+                      </>
+                    ) : (
+                      <>
+                        <Mail className="h-4.5 w-4.5 shrink-0" />
+                        <span>Simular Antecipação por E-mail</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+
+              <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-[10px] text-slate-400">
+                <span className="flex items-center gap-1">
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+                  Conexão Segura SSL
+                </span>
+                <span>Resposta ágil e segura</span>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Help Card */}
           <div className="bg-slate-100/50 rounded-2xl p-6 border border-slate-200/40 text-center space-y-3">

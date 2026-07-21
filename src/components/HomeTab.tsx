@@ -1,11 +1,56 @@
-import React from 'react';
-import { FileText, Coins, Percent, ArrowRight, ShieldAlert, CheckCircle, Smartphone, MessageSquare } from 'lucide-react';
+import React, { useState } from 'react';
+import { FileText, Coins, Percent, ArrowRight, ShieldAlert, CheckCircle, Smartphone, MessageSquare, Phone, ShieldCheck, X } from 'lucide-react';
 
 interface HomeTabProps {
   setActiveTab: (tab: string) => void;
 }
 
 export default function HomeTab({ setActiveTab }: HomeTabProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [nome, setNome] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const formatCPFOrCNPJ = (value: string) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 11) {
+      return raw
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } else {
+      return raw
+        .substring(0, 14)
+        .replace(/^(\d{2})(\d)/, '$1.$2')
+        .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/\.(\d{3})(\d)/, '.$1/$2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+  };
+
+  const formatPhone = (value: string) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 10) {
+      return raw
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d{4})$/, '$1-$2');
+    } else {
+      return raw
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d{4})$/, '$1-$2');
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      window.location.href = 'tel:11977655148';
+      setIsOpen(false);
+      setSubmitted(false);
+    }, 1800);
+  };
 
   return (
     <div className="space-y-16 py-8" id="home-tab-container">
@@ -158,21 +203,21 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
         </div>
       </section>
 
-      {/* WhatsApp Support Information Section */}
-      <section className="bg-white border border-slate-150 rounded-3xl p-6 sm:p-10 shadow-sm space-y-8" id="whatsapp-info-section">
+      {/* Phone Support Information Section */}
+      <section className="bg-white border border-slate-150 rounded-3xl p-6 sm:p-10 shadow-sm space-y-8" id="phone-info-section">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
           <div className="space-y-1">
             <h2 className="font-display text-2xl font-extrabold text-gray-900 flex items-center gap-2">
-              <MessageSquare className="h-6 w-6 text-emerald-600 shrink-0" />
-              Atendimento Digital Banco Toyota via WhatsApp
+              <Phone className="h-6 w-6 text-red-600 shrink-0" />
+              Atendimento por Telefone Oficial Banco Toyota
             </h2>
             <p className="text-sm text-slate-500">
-              Inicie um atendimento automatizado e seguro diretamente em nosso WhatsApp para resolver pendências do seu contrato.
+              Inicie um atendimento seguro por telefone com nossos especialistas para resolver pendências do seu contrato.
             </p>
           </div>
-          <div className="flex items-center space-x-2 bg-emerald-50 px-3.5 py-1.5 rounded-full text-xs font-semibold text-emerald-700 border border-emerald-100 shrink-0">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Kira (Assistente Virtual) Ativa</span>
+          <div className="flex items-center space-x-2 bg-red-50 px-3.5 py-1.5 rounded-full text-xs font-semibold text-red-700 border border-red-100 shrink-0">
+            <span className="flex h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+            <span>Central de Atendimento Ativa</span>
           </div>
         </div>
 
@@ -180,9 +225,9 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
           {/* Informative text */}
           <div className="lg:col-span-7 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-slate-850">Como funciona o nosso canal de suporte?</h3>
+              <h3 className="text-lg font-bold text-slate-850">Como funciona o nosso canal de suporte telefônico?</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
-                Nossa assistente inteligente, <strong>Kira</strong>, foi projetada para tornar a sua experiência o mais rápida e prática possível. Sem filas de espera no telefone e sem burocracia, você pode solicitar os seguintes serviços em segundos:
+                Nossa central de voz foi projetada para tornar a sua experiência o mais rápida e prática possível. Sem burocracia, você pode solicitar os seguintes serviços em minutos falando com um consultor autorizado:
               </p>
             </div>
 
@@ -192,7 +237,7 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
                 <p className="text-xs text-slate-500">Emissão de 2ª via de boleto de parcela mensal ou atrasada com atualização de juros.</p>
               </div>
               <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-1.5">
-                <span className="font-bold text-xs text-emerald-600 uppercase tracking-wider block">Desconto de Quitação</span>
+                <span className="font-bold text-xs text-red-650 uppercase tracking-wider block">Desconto de Quitação</span>
                 <p className="text-xs text-slate-500">Amortização de parcelas ou quitação total com desconto proporcional de juros garantido por lei.</p>
               </div>
               <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-1.5">
@@ -200,8 +245,8 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
                 <p className="text-xs text-slate-500">Planos flexíveis de renegociação para regularização imediata de restrições de crédito.</p>
               </div>
               <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-1.5">
-                <span className="font-bold text-xs text-purple-600 uppercase tracking-wider block">Segurança Integrada</span>
-                <p className="text-xs text-slate-500">Documentos oficiais em PDF protegidos com criptografia e registro oficial Febraban.</p>
+                <span className="font-bold text-xs text-slate-700 uppercase tracking-wider block">Segurança Integrada</span>
+                <p className="text-xs text-slate-500">Documentos oficiais gerados em conformidade com as diretrizes do Banco Central.</p>
               </div>
             </div>
 
@@ -214,53 +259,41 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
           </div>
 
           {/* Call-to-action box */}
-          <div className="lg:col-span-5 bg-emerald-50/40 border border-emerald-100/60 p-6 sm:p-8 rounded-2xl space-y-6 flex flex-col justify-between">
+          <div className="lg:col-span-5 bg-red-50/40 border border-red-100/60 p-6 sm:p-8 rounded-2xl space-y-6 flex flex-col justify-between">
             <div className="space-y-4">
               <div className="space-y-1">
-                <span className="text-[10px] font-bold text-emerald-750 uppercase tracking-widest block">Canal Oficial Autorizado</span>
+                <span className="text-[10px] font-bold text-red-700 uppercase tracking-widest block">Canal Oficial Autorizado</span>
                 <h4 className="text-lg font-extrabold text-slate-900 leading-tight">Atendimento Instantâneo</h4>
               </div>
               
               <p className="text-xs text-slate-600 leading-relaxed">
-                Clique no botão abaixo para ser redirecionado de forma segura ao nosso canal oficial do WhatsApp. Envie uma mensagem com a sua solicitação e receba suporte imediato.
+                Clique no botão abaixo para preencher o formulário de segurança e ser conectado de forma rápida e segura ao nosso telefone de suporte oficial.
               </p>
 
               <div className="space-y-2 pt-2">
                 <div className="flex items-center gap-2 text-xs text-slate-700">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  <span>Média de resposta: <strong>menos de 1 min</strong></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                  <span>Média de resposta: <strong>menos de 2 min</strong></span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-slate-700">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  <span>Disponível: <strong>24h por dia, 7 dias por semana</strong></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                  <span>Disponível: <strong>Segunda a Sexta, das 8h às 20h</strong></span>
                 </div>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-emerald-100/60 space-y-4">
-              <a 
-                href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full rounded-xl bg-emerald-600 py-4 text-xs font-bold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center space-x-2"
-                id="btn-whatsapp-home-info"
+            <div className="pt-4 border-t border-red-100/60 space-y-4">
+              <button 
+                onClick={() => setIsOpen(true)}
+                className="w-full rounded-xl bg-red-600 py-4 text-xs font-bold text-white shadow-md shadow-red-600/20 hover:bg-red-700 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center space-x-2 border-none outline-none"
+                id="btn-phone-home-info"
               >
-                <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.588 2.01 14.12 1.01 11.5 1.01c-5.436 0-9.86 4.37-9.864 9.8 0 1.637.452 3.23 1.309 4.633L1.925 21.8l6.452-1.68c.31.08.31.08-.01.08zM17.51 14.39c-.3-.149-1.762-.87-2.034-.97-.27-.1-.47-.149-.669.149-.2.3-.764.96-.938 1.16-.17.2-.34.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.785-1.48-1.76-1.65-2.059-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.38-.02-.53-.07-.15-.67-1.62-.92-2.22-.24-.59-.49-.51-.67-.52-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.03 1.01-1.03 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.09 3.2 5.07 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.11.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.08-.12-.29-.2-.59-.35z"/>
-                </svg>
-                <span>Falar com Atendimento no WhatsApp</span>
-              </a>
+                <Phone className="h-4.5 w-4.5 shrink-0" />
+                <span>Solicitar por Telefone</span>
+              </button>
 
               <div className="text-center space-y-1">
-                <span className="text-[10px] text-slate-500 block">Link de redirecionamento direto:</span>
-                <a 
-                  href="https://api.whatsapp.com/send?phone=5511977655148&text=Solicito%20Atendimento"
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold underline break-all block"
-                >
-                  https://wa.me/5511977655148
-                </a>
+                <span className="text-[10px] text-slate-500 block">Atendimento ativo com registro oficial.</span>
               </div>
             </div>
           </div>
@@ -285,7 +318,7 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
             <ul className="text-xs text-slate-500 space-y-2 list-disc pl-4 leading-normal">
               <li>Verifique o beneficiário do boleto: deve constar <strong>BANCO TOYOTA S/A (CNPJ 02.115.111/0001-22)</strong>.</li>
               <li>O código de banco para boletos emitidos pelo Banco Toyota começa com <strong>033</strong> (Banco Santander, emissor parceiro) ou <strong>341</strong> (Itaú).</li>
-              <li>Sempre desconfie de propostas com descontos absurdos de quitação vindas de números não oficiais no WhatsApp.</li>
+              <li>Sempre desconfie de propostas com descontos absurdos de quitação vindas de números não oficiais por telefone ou mensagem.</li>
             </ul>
           </div>
         </div>
@@ -311,6 +344,98 @@ export default function HomeTab({ setActiveTab }: HomeTabProps) {
         </div>
 
       </section>
+
+      {/* Modal / Dialog Form */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in" id="home-modal">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
+            {/* Header */}
+            <div className="bg-slate-50 border-b border-gray-100 p-5 flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-gray-900">Solicitar Atendimento</h3>
+                <p className="text-[11px] text-slate-500 mt-0.5">Falar com Central de Atendimento por Telefone</p>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="p-1 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all border-none bg-transparent outline-none cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {submitted ? (
+              <div className="p-8 text-center space-y-4">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                  <Phone className="h-6 w-6 animate-pulse" />
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm font-bold text-gray-900">Discando para a Central Oficial...</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
+                    Conectando ao telefone de suporte. Confirme a chamada no seu aparelho para falar conosco.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              /* Form */
+              <form onSubmit={handleSubmit} className="p-5 space-y-4 overflow-y-auto">
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold text-gray-700">Nome do Titular</label>
+                  <input
+                    type="text"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    placeholder="Nome completo do titular"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold text-gray-700">CPF ou CNPJ</label>
+                  <input
+                    type="text"
+                    value={cpf}
+                    onChange={(e) => setCpf(formatCPFOrCNPJ(e.target.value))}
+                    placeholder="000.000.000-00 ou 00.000.000/0000-00"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                    maxLength={18}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold text-gray-700">Telefone de Contato</label>
+                  <input
+                    type="tel"
+                    value={telefone}
+                    onChange={(e) => setTelefone(formatPhone(e.target.value))}
+                    placeholder="(00) 00000-0000"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
+                    maxLength={15}
+                    required
+                  />
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
+                  >
+                    <Phone className="h-4 w-4 shrink-0" />
+                    <span>Iniciar Atendimento por Telefone</span>
+                  </button>
+                </div>
+              </form>
+            )}
+
+            <div className="bg-slate-50 p-4 border-t border-gray-100 text-[10px] text-slate-500 text-center leading-normal flex items-center justify-center gap-1.5">
+              <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>Seus dados estão protegidos pela LGPD e serão utilizados exclusivamente para autenticação oficial.</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

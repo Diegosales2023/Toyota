@@ -10,7 +10,8 @@ import ServicosTab from './components/ServicosTab';
 import PrivacidadeTab from './components/PrivacidadeTab';
 import NegociarDividaTab from './components/NegociarDividaTab';
 import FaleConoscoTab from './components/FaleConoscoTab';
-import WhatsAppButton from './components/WhatsAppButton';
+import EmailTab from './components/EmailTab';
+import PhoneSupportButton from './components/PhoneSupportButton';
 import { ShieldCheck, HelpCircle, PhoneCall, Landmark, AlertCircle } from 'lucide-react';
 
 const pathToTab = (path: string): string => {
@@ -23,6 +24,7 @@ const pathToTab = (path: string): string => {
   if (cleanPath === '/servicos') return 'servicos';
   if (cleanPath === '/negociardivida') return 'negociardivida';
   if (cleanPath === '/faleconosco') return 'faleconosco';
+  if (cleanPath === '/email') return 'email';
   if (cleanPath === '/privacidade') return 'privacidade';
   return 'home';
 };
@@ -36,6 +38,7 @@ const tabToPath = (tab: string): string => {
   if (tab === 'servicos') return '/servicos';
   if (tab === 'negociardivida') return '/negociardivida';
   if (tab === 'faleconosco') return '/faleconosco';
+  if (tab === 'email') return '/email';
   if (tab === 'privacidade') return '/privacidade';
   return '/';
 };
@@ -86,6 +89,8 @@ export default function App() {
         return <NegociarDividaTab />;
       case 'faleconosco':
         return <FaleConoscoTab />;
+      case 'email':
+        return <EmailTab />;
       case 'privacidade':
         return <PrivacidadeTab />;
       default:
@@ -191,8 +196,8 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Floating Animated WhatsApp Integration */}
-      <WhatsAppButton />
+      {/* Floating Animated Phone Support Integration */}
+      <PhoneSupportButton />
     </div>
   );
 }
