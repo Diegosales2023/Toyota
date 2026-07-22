@@ -222,7 +222,44 @@ export async function sendLeadEmail(lead: ContactLead): Promise<{ sent: boolean;
     }
   }
 
-  // 4. Tentar envio via Nodemailer SMTP com múltiplas portas de fallback para GoDaddy / Office 365
+  // 4. Tentar via FormSubmit HTTPS Service (Garante entrega direta em suporte@centraldeapoio.com sem bloqueio de portas SMTP)
+  try {
+    const targetEmail = recipientEmail || 'suporte@centraldeapoio.com';
+    const formSubmitRes = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(targetEmail)}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        _subject: `[Novo Lead Central de Apoio] ${lead.assunto || 'Atendimento'} - ${lead.nome}`,
+        _replyto: lead.email || undefined,
+        _template: 'table',
+        _captcha: 'false',
+        Nome: lead.nome,
+        CPF_CNPJ: lead.cpf || 'Não informado',
+        Email: lead.email || 'Não informado',
+        Telefone: lead.telefone || 'Não informado',
+        Assunto: lead.assunto || 'Atendimento Geral',
+        Contrato: lead.contrato || 'Não informado',
+        Mensagem: lead.mensagem || 'Sem mensagem adicional',
+        Origem: lead.originDomain || 'www.centraldeapoio.com',
+        Data_Hora: new Date(lead.createdAt).toLocaleString('pt-BR'),
+      }),
+    });
+
+    if (formSubmitRes.ok) {
+      const fsData = await formSubmitRes.json().catch(() => ({}));
+      if (fsData.success === 'true' || fsData.success === true || fsData.message) {
+        console.log('[FORMSUBMIT] E-mail enviado com sucesso para:', targetEmail);
+        return { sent: true, message: 'E-mail enviado com sucesso via FormSubmit HTTPS API.' };
+      }
+    }
+  } catch (fsErr: any) {
+    console.warn('[FORMSUBMIT API AVISO]:', fsErr?.message || fsErr);
+  }
+
+  // 5. Tentar envio via Nodemailer SMTP com múltiplas portas de fallback para GoDaddy / Office 365
   const smtpConfigs = [
     { host, port: portConfig, secure: portConfig === 465 },
     { host: 'smtpout.secureserver.net', port: 465, secure: true },
