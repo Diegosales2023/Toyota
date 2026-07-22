@@ -1,7 +1,7 @@
 import { setCorsHeaders, readLeadsBackup, saveLeadsBackup, sendLeadEmail, ContactLead } from './shared/leadsService';
 
 export default async function handler(req: any, res: any) {
-  setCorsHeaders(res);
+  setCorsHeaders(res, req);
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();

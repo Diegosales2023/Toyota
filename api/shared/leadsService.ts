@@ -20,14 +20,18 @@ export interface ContactLead {
 
 const BACKUP_FILE = path.join(os.tmpdir(), 'leads_backup.json');
 
-export function setCorsHeaders(res: any) {
+export function setCorsHeaders(res: any, req?: any) {
+  const reqOrigin = req?.headers?.origin || req?.headers?.Origin;
+  const allowOrigin = reqOrigin || '*';
   if (typeof res.setHeader === 'function') {
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', allowOrigin);
+    if (reqOrigin) {
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+    }
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,PUT,DELETE');
     res.setHeader(
       'Access-Control-Allow-Headers',
-      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
     );
   }
 }
@@ -75,15 +79,6 @@ export async function sendLeadEmail(lead: ContactLead): Promise<{ sent: boolean;
   const SMTP_USER = process.env.SMTP_USER;
   const SMTP_PASS = process.env.SMTP_PASS;
   const SMTP_FROM = process.env.SMTP_FROM;
-
-  // Se nenhuma variável de e-mail estiver configurada em process.env, simula envio com sucesso para testes sem crashar
-  if (!SMTP_HOST && !SMTP_USER && !SMTP_PASS && !RESEND_API_KEY && !SENDGRID_API_KEY && !EMAIL_WEBHOOK_URL) {
-    console.warn('[SMTP AVISO] Variáveis de ambiente SMTP (SMTP_HOST, SMTP_USER, SMTP_PASS) não foram encontradas em process.env. Simulando envio com sucesso no log.');
-    return {
-      sent: true,
-      message: 'Aviso: Variáveis SMTP ausentes em process.env. Envio simulado com sucesso (lead gravado no backup local).',
-    };
-  }
 
   const host = (SMTP_HOST || 'smtpout.secureserver.net').trim();
   const portConfig = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 465;
