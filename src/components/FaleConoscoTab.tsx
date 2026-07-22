@@ -143,14 +143,33 @@ export default function FaleConoscoTab() {
               <div className="space-y-2">
                 <h3 className="text-xl font-bold text-gray-900">Mensagem Enviada com Sucesso!</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Agradecemos o seu contato, <strong className="text-slate-800">{name}</strong>. Sua mensagem foi recebida pela nossa equipe e responderemos em breve através do e-mail <strong className="text-slate-800">{email}</strong>.
+                  Agradecemos o seu contato, <strong className="text-slate-800">{name}</strong>. Sua solicitação foi registrada no sistema e enviada para a nossa central de atendimento no e-mail <strong className="text-slate-800">suporte@centraldeapoio.com</strong>.
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-slate-100">
+              <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl text-left space-y-2">
+                <p className="text-[11px] font-bold text-slate-800 flex items-center gap-1.5">
+                  <Mail className="h-4 w-4 text-red-600" />
+                  Envio Direto pelo seu Aplicativo de E-mail
+                </p>
+                <p className="text-[10px] text-slate-500">
+                  Caso deseje garantir o envio direto pelo seu programa de e-mail padrão (Gmail, Outlook, Mail):
+                </p>
+                <a
+                  href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`[Contato Site] ${subject} - ${name}`)}&body=${encodeURIComponent(`Nome: ${name}\nCPF/CNPJ: ${cpf}\nTelefone: ${phone}\nE-mail: ${email}\nAssunto: ${subject}\nMensagem: ${message}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-all no-underline mt-1"
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  Abrir no meu aplicativo de e-mail agora
+                </a>
+              </div>
+
+              <div className="pt-2 border-t border-slate-100">
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all cursor-pointer border-none outline-none"
+                  className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all cursor-pointer border-none outline-none"
                 >
                   Enviar Nova Mensagem
                 </button>

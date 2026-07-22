@@ -31,6 +31,16 @@ export async function submitLead(lead: LeadData): Promise<SubmitLeadResponse> {
     createdAt: new Date().toISOString(),
   };
 
+  // Grava imediatamente no localStorage client-side
+  try {
+    const existing = localStorage.getItem('central_leads');
+    const list = existing ? JSON.parse(existing) : [];
+    list.unshift({ id: `lead_${Date.now()}_${Math.random().toString(36).substring(2,6)}`, ...payload });
+    localStorage.setItem('central_leads', JSON.stringify(list));
+  } catch (e) {
+    console.warn('Erro ao gravar lead no localStorage:', e);
+  }
+
   const cloudRunUrl = `${CLOUD_RUN_BACKEND_URL}/api/contact`;
   const localUrl = getApiUrl('/api/contact');
 

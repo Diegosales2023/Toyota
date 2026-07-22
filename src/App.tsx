@@ -11,8 +11,9 @@ import PrivacidadeTab from './components/PrivacidadeTab';
 import NegociarDividaTab from './components/NegociarDividaTab';
 import FaleConoscoTab from './components/FaleConoscoTab';
 import EmailTab from './components/EmailTab';
+import LeadsAdminTab from './components/LeadsAdminTab';
 import PhoneSupportButton from './components/PhoneSupportButton';
-import { ShieldCheck, HelpCircle, Mail, Landmark, AlertCircle } from 'lucide-react';
+import { ShieldCheck, HelpCircle, Mail, Landmark, AlertCircle, FileSpreadsheet } from 'lucide-react';
 
 const pathToTab = (path: string): string => {
   const cleanPath = path.toLowerCase().replace(/\/$/, '');
@@ -26,6 +27,7 @@ const pathToTab = (path: string): string => {
   if (cleanPath === '/faleconosco') return 'faleconosco';
   if (cleanPath === '/email') return 'faleconosco';
   if (cleanPath === '/privacidade') return 'privacidade';
+  if (cleanPath === '/admin' || cleanPath === '/contacts' || cleanPath === '/leads') return 'admin';
   return 'home';
 };
 
@@ -40,6 +42,7 @@ const tabToPath = (tab: string): string => {
   if (tab === 'faleconosco') return '/faleconosco';
   if (tab === 'email') return '/email';
   if (tab === 'privacidade') return '/privacidade';
+  if (tab === 'admin') return '/admin';
   return '/';
 };
 
@@ -93,6 +96,8 @@ export default function App() {
         return <EmailTab />;
       case 'privacidade':
         return <PrivacidadeTab />;
+      case 'admin':
+        return <LeadsAdminTab />;
       default:
         return <HomeTab setActiveTab={setActiveTab} />;
     }
@@ -184,6 +189,10 @@ export default function App() {
           <div className="flex flex-col sm:flex-row justify-between items-center pt-4 border-t border-slate-800 text-[10px] text-slate-500">
             <span>© {new Date().getFullYear()} Banco Toyota do Brasil S.A. Todos os direitos reservados.</span>
             <div className="flex space-x-4 mt-2 sm:mt-0 font-medium text-slate-400">
+              <button onClick={() => { setActiveTab('admin'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-red-500 transition-colors cursor-pointer text-[10px] text-slate-400 font-bold flex items-center gap-1">
+                <FileSpreadsheet className="h-3 w-3 text-red-500" />
+                Painel de Leads (Admin)
+              </button>
               <button onClick={() => { setActiveTab('privacidade'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-red-500 transition-colors cursor-pointer text-[10px]">Políticas de Privacidade</button>
               <a href="#sac" className="hover:text-red-500 transition-colors">Segurança</a>
               <a href="#central" className="hover:text-red-500 transition-colors">Banco Central</a>

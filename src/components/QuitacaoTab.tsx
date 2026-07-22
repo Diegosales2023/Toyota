@@ -181,7 +181,24 @@ export default function QuitacaoTab() {
               </p>
             </div>
 
-            <div className="pt-4 border-t border-slate-100">
+            <div className="bg-slate-50 p-4 rounded-xl text-left text-xs space-y-1.5 border border-slate-100">
+              <p className="font-bold text-slate-800">Resumo Cadastrado:</p>
+              <p className="text-slate-600"><strong>Nome:</strong> {nome}</p>
+              <p className="text-slate-600"><strong>CPF/CNPJ:</strong> {cpf}</p>
+              <p className="text-slate-600"><strong>E-mail:</strong> {email}</p>
+              <p className="text-slate-600"><strong>Telefone:</strong> {telefone}</p>
+            </div>
+
+            <a
+              href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`[Banco Toyota] Solicitação - ${assunto} - ${nome}`)}&body=${encodeURIComponent(`Olá, gostaria de solicitar quitação do meu contrato:\n- Nome: ${nome}\n- CPF/CNPJ: ${cpf}\n- E-mail: ${email}\n- Telefone: ${telefone}\n- Assunto: ${assunto}\n\nEnviado via www.centraldeapoio.com`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full py-3 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-all text-center no-underline shadow-sm"
+            >
+              Enviar via Meu Aplicativo de E-mail (Gmail / Outlook)
+            </a>
+
+            <div className="pt-2 border-t border-slate-100">
               <button
                 onClick={() => setSubmitted(false)}
                 className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all cursor-pointer border-none outline-none"
