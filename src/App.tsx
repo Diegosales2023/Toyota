@@ -24,7 +24,7 @@ const pathToTab = (path: string): string => {
   if (cleanPath === '/servicos') return 'servicos';
   if (cleanPath === '/negociardivida') return 'negociardivida';
   if (cleanPath === '/faleconosco') return 'faleconosco';
-  if (cleanPath === '/email') return 'email';
+  if (cleanPath === '/email') return 'faleconosco';
   if (cleanPath === '/privacidade') return 'privacidade';
   return 'home';
 };

@@ -18,7 +18,6 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
     { id: 'sobrenos', label: 'Sobre Nós' },
     { id: 'servicos', label: 'Serviços Prestados' },
     { id: 'negociardivida', label: 'Negociar Dívida' },
-    { id: 'email', label: 'Suporte por E-mail' },
     { id: 'privacidade', label: 'Política de Privacidade' },
     { id: 'faleconosco', label: 'Fale Conosco' },
   ];
