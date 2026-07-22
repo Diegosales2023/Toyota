@@ -1,74 +1,14 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Car, Key, FileSpreadsheet, Percent, HeartHandshake, HelpCircle, PhoneCall, ArrowRight, CheckCircle2, Phone, Mail } from 'lucide-react';
-import { submitLead } from '../lib/leads';
+import { ShieldCheck, Car, Key, FileSpreadsheet, PhoneCall, ArrowRight, HelpCircle } from 'lucide-react';
+import UnifiedContactModal from './UnifiedContactModal';
 
 export default function ServicosTab() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState('');
-  const [nome, setNome] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-
-  const formatCPFOrCNPJ = (value: string) => {
-    const raw = value.replace(/\D/g, '');
-    if (raw.length <= 11) {
-      return raw
-        .replace(/(\d{3})(\d)/, '$1.$2')
-        .replace(/(\d{3})(\d)/, '$1.$2')
-        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-    } else {
-      return raw
-        .substring(0, 14)
-        .replace(/^(\d{2})(\d)/, '$1.$2')
-        .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
-        .replace(/\.(\d{3})(\d)/, '.$1/$2')
-        .replace(/(\d{4})(\d)/, '$1-$2');
-    }
-  };
-
-  const formatPhone = (value: string) => {
-    const raw = value.replace(/\D/g, '');
-    if (raw.length <= 10) {
-      return raw
-        .replace(/^(\d{2})(\d)/, '($1) $2')
-        .replace(/(\d{4})(\d{4})$/, '$1-$2');
-    } else {
-      return raw
-        .replace(/^(\d{2})(\d)/, '($1) $2')
-        .replace(/(\d{5})(\d{4})$/, '$1-$2');
-    }
-  };
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState('CDC - Crédito Direto ao Consumidor');
 
   const openModal = (serviceTitle: string) => {
     setSelectedService(serviceTitle);
-    setSubmitted(false);
-    setIsOpen(true);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    submitLead({
-      nome,
-      email: '',
-      cpf,
-      telefone,
-      assunto: `Serviço: ${selectedService}`,
-      originDomain: 'https://www.centraldeapoio.com',
-      targetEmail: 'suporte@centraldeapoio.com',
-    });
-
-    const emailSubject = `Solicitação de Atendimento - ${selectedService}`;
-    const emailBody = `Olá, gostaria de solicitar atendimento para meu contrato:
-- Serviço: ${selectedService}
-- Nome: ${nome}
-- CPF/CNPJ: ${cpf}
-- Telefone: ${telefone}
-
-Enviado via www.centraldeapoio.com`;
-
-    window.location.href = `mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-    setSubmitted(true);
+    setModalOpen(true);
   };
 
   const services = [
@@ -177,116 +117,12 @@ Enviado via www.centraldeapoio.com`;
         </button>
       </div>
 
-      {/* Modal / Dialog Form */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in" id="servicos-modal">
-          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
-            {/* Header */}
-            <div className="bg-slate-50 border-b border-gray-100 p-5 flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-bold text-gray-900">Solicitar Atendimento</h3>
-                <p className="text-[11px] text-slate-500 mt-0.5">{selectedService}</p>
-              </div>
-              <button 
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="p-1 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all border-none bg-transparent outline-none cursor-pointer"
-              >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            {submitted ? (
-              <div className="p-8 text-center space-y-6">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                  <CheckCircle2 className="h-8 w-8" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold text-gray-900">Mensagem Enviada!</h3>
-                  <p className="text-xs text-slate-500 leading-relaxed">
-                    Agradecemos seu contato, <strong className="text-slate-800">{nome}</strong>. Registramos seu interesse em <strong>{selectedService}</strong>. Sua solicitação foi enviada para <strong className="text-slate-800">suporte@centraldeapoio.com</strong>.
-                  </p>
-                </div>
-                <div className="pt-4 border-t border-slate-100 space-y-3">
-                  <p className="text-[10px] text-slate-400">Caso seu programa de e-mail não tenha aberto automaticamente, clique abaixo:</p>
-                  <a
-                    href={`mailto:suporte@centraldeapoio.com?subject=${encodeURIComponent(`Solicitação de Atendimento - ${selectedService}`)}&body=${encodeURIComponent(`Olá, gostaria de solicitar atendimento para meu contrato:\n- Serviço: ${selectedService}\n- Nome: ${nome}\n- CPF/CNPJ: ${cpf}\n- Telefone: ${telefone}`)}`}
-                    className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border-none outline-none text-center"
-                  >
-                    <Mail className="h-4 w-4" />
-                    <span>Enviar E-mail para suporte@centraldeapoio.com</span>
-                  </a>
-                  <button
-                    onClick={() => setIsOpen(false)}
-                    className="text-xs text-slate-400 hover:text-slate-600 underline font-medium cursor-pointer bg-transparent border-none outline-none pt-2"
-                  >
-                    Fechar Janela
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="p-5 space-y-4 overflow-y-auto">
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold text-gray-700">Nome do Titular</label>
-                    <input
-                      type="text"
-                      value={nome}
-                      onChange={(e) => setNome(e.target.value)}
-                      placeholder="Nome completo do titular"
-                      className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold text-gray-700">CPF ou CNPJ</label>
-                    <input
-                      type="text"
-                      value={cpf}
-                      onChange={(e) => setCpf(formatCPFOrCNPJ(e.target.value))}
-                      placeholder="000.000.000-00 ou 00.000.000/0000-00"
-                      className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
-                      maxLength={18}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold text-gray-700">Telefone de Contato</label>
-                    <input
-                      type="tel"
-                      value={telefone}
-                      onChange={(e) => setTelefone(formatPhone(e.target.value))}
-                      placeholder="(00) 00000-0000"
-                      className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-xs outline-none focus:border-red-500 focus:bg-white transition-all text-gray-800"
-                      maxLength={15}
-                      required
-                    />
-                  </div>
-
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20 transition-all flex items-center justify-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] text-center border-none outline-none"
-                    >
-                      <Mail className="h-4 w-4 shrink-0" />
-                      <span>Enviar Solicitação por E-mail</span>
-                    </button>
-                  </div>
-                </form>
-
-                <div className="bg-slate-50 p-4 border-t border-gray-100 text-[10px] text-slate-500 text-center leading-normal">
-                  Seus dados estão protegidos em conformidade com a LGPD e serão utilizados exclusivamente para direcionar seu atendimento oficial.
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Unified Contact Form Modal */}
+      <UnifiedContactModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        defaultAssunto={selectedService}
+      />
     </div>
   );
 }
